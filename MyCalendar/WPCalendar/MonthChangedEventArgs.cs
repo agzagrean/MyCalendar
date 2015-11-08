@@ -7,9 +7,7 @@ namespace WPCalendar
     /// </summary>
     public class MonthChangedEventArgs : EventArgs
     {
-        // ReSharper disable UnusedMember.Local
         private MonthChangedEventArgs() { }
-        // ReSharper restore UnusedMember.Local
 
         internal MonthChangedEventArgs(int year, int month)
         {

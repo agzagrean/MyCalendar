@@ -113,7 +113,7 @@
                             </Button.Background>
                         </Button>
                       
-                        <local:GridControl 
+                        <Grid 
                             x:Name="ItemsGrid"
                             Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
                             Margin="0,10,0,0"
@@ -144,7 +144,7 @@
                             <TextBlock Text="{TemplateBinding Thursday}" FontFamily="Segoe UI Semilight" Foreground="{StaticResource PhoneForegroundBrush1}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="5"/>
                             <TextBlock Text="{TemplateBinding Friday}" FontFamily="Segoe UI Semilight" Foreground="{StaticResource PhoneForegroundBrush1}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="6"/>
                             <TextBlock Text="{TemplateBinding Saturday}"  FontFamily="Segoe UI Semilight" Foreground="{StaticResource PhoneForegroundBrush2}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="7"/>
-                            </local:GridControl>
+                            </Grid>
 
                         <Grid x:Name="DayDetailsGrid" 
                               Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="3"  Visibility="Collapsed" >
@@ -192,65 +192,41 @@
                             <ScrollViewer x:Name="ScrollViewsHours" 
                                           AllowDrop="False"
                                           Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
-                                <local:GridControl  x:Name="gridHours" ShowGridLines ="False" 
-                                       Height="Auto" Width="Auto"
+                                <Grid  x:Name="gridHours" ShowGridLines ="False" 
                                        Background="Transparent" >
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="50"/>
-                                        <ColumnDefinition Width="0.9*"/>
+                                        <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
-                                        <!--00-->
-                                        <RowDefinition Height="*"/>
-                                        <!--01-->
-                                        <RowDefinition Height="*"/>
-                                        <!--02-->
-                                        <RowDefinition Height="*"/>
-                                        <!--03-->
-                                        <RowDefinition Height="*"/>
-                                        <!--04-->
-                                        <RowDefinition Height="*"/>
-                                        <!--05-->
-                                        <RowDefinition Height="*"/>
-                                        <!--06-->
-                                        <RowDefinition Height="*"/>
-                                        <!--07-->
-                                        <RowDefinition Height="*"/>
-                                        <!--08-->
-                                        <RowDefinition Height="*"/>
-                                        <!--09-->
-                                        <RowDefinition Height="*"/>
-                                        <!--10-->
-                                        <RowDefinition Height="*"/>
-                                        <!--11-->
-                                        <RowDefinition Height="*"/>
-                                        <!--12-->
-                                        <RowDefinition Height="*"/>
-                                        <!--13-->
-                                        <RowDefinition Height="*"/>
-                                        <!--14-->
-                                        <RowDefinition Height="*"/>
-                                        <!--15-->
-                                        <RowDefinition Height="*"/>
-                                        <!--16-->
-                                        <RowDefinition Height="*"/>
-                                        <!--17-->
-                                        <RowDefinition Height="*"/>
-                                        <!--18-->
-                                        <RowDefinition Height="*"/>
-                                        <!--19-->
-                                        <RowDefinition Height="*"/>
-                                        <!--20-->
-                                        <RowDefinition Height="*"/>
-                                        <!--21-->
-                                        <RowDefinition Height="*"/>
-                                        <!--22-->
-                                        <RowDefinition Height="*"/>
-                                        <!--23-->
-                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="1"/>         
+                                        <!--00-->    <RowDefinition Height="*"/>    
+										<!--01-->    <RowDefinition Height="*"/>    
+										<!--02-->    <RowDefinition Height="*"/>    
+										<!--03-->    <RowDefinition Height="*"/>    
+										<!--04-->    <RowDefinition Height="*"/>    
+										<!--05-->    <RowDefinition Height="*"/>    
+										<!--06-->    <RowDefinition Height="*"/>    
+										<!--07-->    <RowDefinition Height="*"/>    
+										<!--08-->    <RowDefinition Height="*"/>    
+										<!--09-->    <RowDefinition Height="*"/>    
+										<!--10-->    <RowDefinition Height="*"/>    
+										<!--11-->    <RowDefinition Height="*"/>    
+										<!--12-->    <RowDefinition Height="*"/>    
+										<!--13-->    <RowDefinition Height="*"/>    
+										<!--14-->    <RowDefinition Height="*"/>    
+										<!--15-->    <RowDefinition Height="*"/>    
+										<!--16-->    <RowDefinition Height="*"/>    
+										<!--17-->    <RowDefinition Height="*"/>    
+										<!--18-->    <RowDefinition Height="*"/>    
+										<!--19-->    <RowDefinition Height="*"/>    
+										<!--20-->    <RowDefinition Height="*"/>    
+										<!--21-->    <RowDefinition Height="*"/>    
+										<!--22-->    <RowDefinition Height="*"/>    
+										<!--23-->    <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
 
-                                </local:GridControl>
+                                </Grid>
                             </ScrollViewer>
                                                      
                             <Rectangle Grid.Row="3" VerticalAlignment="Bottom" Grid.ColumnSpan="2"

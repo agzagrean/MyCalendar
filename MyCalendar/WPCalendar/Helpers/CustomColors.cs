@@ -10,7 +10,6 @@ namespace WPCalendar.Helpers
 {
     public static class CustomColor
     {
-
         public static SolidColorBrush Blue
         {
             get
@@ -50,12 +49,10 @@ namespace WPCalendar.Helpers
         {
             get { return new SolidColorBrush(Color.FromArgb(255, 192, 192, 192)); }
         }
-
         public static SolidColorBrush DarkBlue
         {
             get { return new SolidColorBrush(Color.FromArgb(255, 65, 105, 225)); }
         }
-
         public static SolidColorBrush White
         {
             get { return new SolidColorBrush(Color.FromArgb(255, 255, 255, 255)); }

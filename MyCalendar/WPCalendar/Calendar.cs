@@ -18,8 +18,8 @@ using Windows.Phone.UI.Input;
 
 namespace WPCalendar
 {
-    
-    public class Calendar : Control
+
+    public partial class Calendar : Control
     {
         #region Constructor
 
@@ -85,20 +85,20 @@ namespace WPCalendar
                             IncrementMonth();
                         }
                     }
-                        /*
+                    /*
+                else
+                {
+                    if ((int)vertical > 0)
+                    {
+                        DecrementYear();
+                    }
                     else
                     {
-                        if ((int)vertical > 0)
-                        {
-                            DecrementYear();
-                        }
-                        else
-                        {
-                            IncrementYear();
+                        IncrementYear();
 
-                        }
                     }
-                         * */
+                }
+                     * */
                 }
             }
         }
@@ -108,8 +108,8 @@ namespace WPCalendar
         #endregion
 
         #region Members
-        private GridControl _itemsGrid;
-        public GridControl _hoursDetails;
+        private Grid _itemsGrid;
+        public Grid _hoursDetails;
 
         public Grid _dayDetailsGrid;
         public StackPanel _spAllDayEvents;
@@ -182,7 +182,7 @@ namespace WPCalendar
         {
             if (SelectionChanged != null)
             {
-               SelectionChanged(this, new SelectionChangedEventArgs(dateTime));
+                SelectionChanged(this, new SelectionChangedEventArgs(dateTime));
             }
         }
 
@@ -219,7 +219,8 @@ namespace WPCalendar
         public EventCalendar EventsProperty
         {
             get { return (EventCalendar)GetValue(PeriodCalendarPropertyProperty); }
-            set {
+            set
+            {
 
                 SetValue(PeriodCalendarPropertyProperty, value);
             }
@@ -236,7 +237,7 @@ namespace WPCalendar
             {
                 calendar.WireUpDataSource(e.OldValue, e.NewValue);
                 calendar.Refresh();
-              
+
             }
 
         }
@@ -333,7 +334,7 @@ namespace WPCalendar
                 calendar.BuildItems();
                 if (e.OldValue is INotifyCollectionChanged)
                 {
-                    ((INotifyCollectionChanged) e.NewValue).CollectionChanged -= calendar.DatesSourceChanged;
+                    ((INotifyCollectionChanged)e.NewValue).CollectionChanged -= calendar.DatesSourceChanged;
                 }
                 if (e.NewValue is INotifyCollectionChanged)
                 {
@@ -401,7 +402,7 @@ namespace WPCalendar
         public static readonly DependencyProperty YearMonthLabelProperty =
             DependencyProperty.Register("YearMonthLabel", typeof(string), typeof(Calendar), new PropertyMetadata(""));
 
-         /// <summary>
+        /// <summary>
         /// This value is shown in detail view header and represents the day of the week
         /// </summary>
         public string DayOfTheWeek
@@ -453,20 +454,20 @@ namespace WPCalendar
             var calendar = sender as Calendar;
             if (calendar != null)
             {
-                var newValue = (DateTime) e.NewValue;
+                var newValue = (DateTime)e.NewValue;
                 if (calendar._itemsGrid != null)
                 {
                     var query = from oneChild in calendar._itemsGrid.Children
                                 where
-                                    oneChild is CalendarItem && ((CalendarItem) oneChild).IsSelected &&
-                                    ((CalendarItem) oneChild).ItemDate != newValue
-                                select (CalendarItem) oneChild;
+                                    oneChild is CalendarItem && ((CalendarItem)oneChild).IsSelected &&
+                                    ((CalendarItem)oneChild).ItemDate != newValue
+                                select (CalendarItem)oneChild;
                     query.ToList().ForEach(one => one.IsSelected = false);
                 }
 
                 calendar.DayTitle = newValue.ToString("dd MMMM yyyy", CultureInfo.CurrentCulture);
                 calendar.DayOfTheWeek = newValue.ToString("dddd", CultureInfo.CurrentCulture);
-             
+
                 calendar.OnSelectionChanged(newValue);
             }
         }
@@ -575,11 +576,11 @@ namespace WPCalendar
             var target = (Calendar)sender;
             if (target.EnableGestures)
             {
-              //  target.EnableGesturesSupport();
+                //  target.EnableGesturesSupport();
             }
             else
             {
-              //  target.DisableGesturesSupport();
+                //  target.DisableGesturesSupport();
             }
         }
 
@@ -866,7 +867,7 @@ namespace WPCalendar
             ((Calendar)sender).SetupDayLabels();
             ((Calendar)sender).BuildItems();
         }
-        
+
 
         #endregion
 
@@ -886,21 +887,23 @@ namespace WPCalendar
 
             tbYearMonthLabel = GetTemplateChild("YearMonthLabelTextBlock") as TextBlock;
 
-            _itemsGrid = GetTemplateChild("ItemsGrid") as GridControl;
+            _itemsGrid = GetTemplateChild("ItemsGrid") as Grid;
             _dayDetailsGrid = GetTemplateChild("DayDetailsGrid") as Grid;
 
             backToMonthViewButton = GetTemplateChild("BackToMonthViewButton") as Button;
             if (backToMonthViewButton != null) backToMonthViewButton.Click += BackToMonthViewButton;
 
             _spAllDayEvents = GetTemplateChild("spAllDayEvents") as StackPanel;
-            _hoursDetails = GetTemplateChild("gridHours") as GridControl;
+            _hoursDetails = GetTemplateChild("gridHours") as Grid;
             _scrollViewerHours = GetTemplateChild("ScrollViewsHours") as ScrollViewer;
             SetupDayLabels();
             BuildDates();
             SetYearMonthLabel();
+
+            SwitchToMonthView();
         }
 
-       
+
         #endregion
 
         #region Event handling
@@ -1002,10 +1005,12 @@ namespace WPCalendar
                         _lastItem.IsSelected = true;
                     SelectedDate = _lastItem.ItemDate;
                     OnDateClicked(_lastItem.ItemDate);
+                    _lastItem.DisplayDetailView();
+
                 }
             }
         }
-
+/*
         private void ItemHold(object sender, GestureEventArgs e)
         {
             if (IsInMonthView)
@@ -1025,36 +1030,11 @@ namespace WPCalendar
                 }
             }
         }
-
+        */
         #endregion
 
+
         #region Methods
-
-        public void SwitchToMonthView()
-        {
-            _itemsGrid.Visibility = previousButton.Visibility = nextButton.Visibility = tbYearMonthLabel.Visibility = Visibility.Visible;
-            _dayDetailsGrid.Visibility = backToMonthViewButton.Visibility = Visibility.Collapsed;
-
-            _spAllDayEvents.Height = 0;
-            _spAllDayEvents.Children.Clear();
-            _hoursDetails.Children.Clear();
-
-            _itemsGrid.GenerateLines();
-
-            // reenable gestures
-            EnableGesturesSupport();
-        }
-
-        public void SwitchToDetailsView()
-        {
-            _itemsGrid.Visibility = previousButton.Visibility = nextButton.Visibility = tbYearMonthLabel.Visibility = Visibility.Collapsed;
-            _dayDetailsGrid.Visibility = backToMonthViewButton.Visibility = Visibility.Visible;
-
-            _hoursDetails.GenerateLines();
-
-            //you don't want flicking years when scrolling into day details
-            DisableGesturesSupport();
-        }
 
         private void SetupDayLabels()
         {
@@ -1142,7 +1122,7 @@ namespace WPCalendar
                     return -1;
                 case DayOfWeek.Monday:
                     return -1;
-           
+
                 case DayOfWeek.Tuesday:
                     return -3;
                 case DayOfWeek.Wednesday:
@@ -1151,7 +1131,7 @@ namespace WPCalendar
                     return -2;
                 case DayOfWeek.Friday:
                     return -5;
-              
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1316,7 +1296,7 @@ namespace WPCalendar
                         {
                             // the week didn't started at column 1
                             if (StartingDayOfWeek != dayOfWeek && daysToAddBefore > 0 && value == -1)
-                            { 
+                            {
                                 //need to add dates before
                                 AddItemsBeforeAfter(startOfMonth, -daysToAddBefore, item);
                                 daysToAddBefore--;
@@ -1325,7 +1305,7 @@ namespace WPCalendar
 
                                 // the week didn't ended at column 7
                                 if (EndingDayOfWeek != endOfMonthDayOfWeek && indexAfter < daysToAddAfter && value == 1)
-                                {  
+                                {
                                     //need to add dates before
                                     indexAfter++;
                                     AddItemsBeforeAfter(endOfMonth, indexAfter, item);
@@ -1393,11 +1373,11 @@ namespace WPCalendar
                         var item = new CalendarItem(this);
                         item.SetValue(Grid.RowProperty, rowCount);
                         item.SetValue(Grid.ColumnProperty, columnCount);
-                      item.Visibility = Visibility.Collapsed;
-                       //   item.Visibility = Visibility.Visible;
+                        item.Visibility = Visibility.Collapsed;
+                        //   item.Visibility = Visibility.Visible;
                         item.Tag = string.Concat(rowCount.ToString(CultureInfo.InvariantCulture), ":", columnCount.ToString(CultureInfo.InvariantCulture));
                         item.Click += ItemClick;
-                        item.Hold +=ItemHold;
+                       // item.Hold += ItemHold;
                         if (CalendarItemStyle != null)
                         {
                             item.Style = CalendarItemStyle;
@@ -1424,7 +1404,7 @@ namespace WPCalendar
                 _addedItems = true;
             }
         }
-       
+
         private void BuildDates()
         {
             if (DatesSource != null)
@@ -1435,11 +1415,5 @@ namespace WPCalendar
         }
 
         #endregion
-
-
-
-
-
-
     }
 }

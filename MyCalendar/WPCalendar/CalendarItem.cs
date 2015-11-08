@@ -16,7 +16,7 @@ namespace WPCalendar
     /// <summary>
     /// This class corresponds to a calendar item / cell
     /// </summary>
-    public class CalendarItem : Button
+    public partial class CalendarItem : Button
     {
         #region Members
 
@@ -148,16 +148,15 @@ namespace WPCalendar
             SetBackcolor();
             SetForecolor();
 
-            _owningCalendar._scrollViewerHours.SizeChanged += _scrollViewerHours_SizeChanged;
+         //   _owningCalendar._scrollViewerHours.SizeChanged += _scrollViewerHours_SizeChanged;
         }
 
         public void _scrollViewerHours_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             ScrollViewer sv = sender as ScrollViewer;
             if (double.IsNaN(sv.Height))
-               _owningCalendar.ResizeScrollviewer();
+                ResizeScrollviewer();
         }
-
 
         private bool IsConverterNeeded()
         {
@@ -174,13 +173,10 @@ namespace WPCalendar
 
         internal void SetBackcolor()
         {
-            if (BackgroundBrush != null )
-            {
+            if (BackgroundBrush != null)
                 Background = BackgroundBrush;
-                    //_owningCalendar.BackgroundColorConverter.Convert(ItemDate, IsSelected, EventsForDay);
-            }
             else
-                Background =  new SolidColorBrush();
+                Background = new SolidColorBrush();
         }
 
         internal void SetForecolor()
@@ -200,15 +196,15 @@ namespace WPCalendar
         public void DisplayDetailView()
         {
             _owningCalendar.SwitchToDetailsView();
-
-            _owningCalendar.GenerateHours();
-
-            _owningCalendar.GenerateDayEvents(EventsForDay);
-
-            
+ 
+            GenerateHours();
+            GenerateDayEvents(EventsForDay);   
         }
 
+     
         #endregion
+
+      
 
     }
 }

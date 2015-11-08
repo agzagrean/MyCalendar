@@ -120,6 +120,8 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Calendar_AddEditItem.cs" />
+    <Compile Include="CalendarItem_DetailsView.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="BrushType.cs" />
     <Compile Include="Calendar.cs" />
@@ -129,7 +131,7 @@
     <Compile Include="Converters\ColorConverter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GridControl.cs" />
+    <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\CustomColors.cs" />
     <Compile Include="Helpers\ExtensionMethods.cs" />
     <Compile Include="Helpers\HelperMethods.cs" />
