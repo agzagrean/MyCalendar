@@ -95,14 +95,18 @@ namespace WPCalendar.Helpers
 
         public static void ResizeScrollviewer(this Calendar calendar)
         {
-            if (!double.IsNaN(calendar._scrollViewerHours.ViewportHeight) && calendar._scrollViewerHours.ViewportHeight != 0)
+            double maxHeight = calendar._scrollViewerHours.ExtentHeight;
+            if (!double.IsNaN(maxHeight) && maxHeight != 0)
             {
-                double newScrollViewerHeight =
-                    calendar._scrollViewerHours.ViewportHeight -
-                    calendar._spAllDayEvents.Height -
-                    calendar._dayDetailsGrid.RowDefinitions[0].Height.Value;
-                if (newScrollViewerHeight > 0)
-                    calendar._scrollViewerHours.Height = newScrollViewerHeight;
+                if (maxHeight > 700)
+                {
+                    double newScrollViewerHeight =
+                        maxHeight -
+                        calendar._spAllDayEvents.Height -
+                        calendar._dayDetailsGrid.RowDefinitions[0].Height.Value;
+                    if (newScrollViewerHeight > 0)
+                        calendar._scrollViewerHours.Height = newScrollViewerHeight;
+                }
             }
         }
 
