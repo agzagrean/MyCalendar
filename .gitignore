@@ -41,3 +41,12 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+MyCalendar/MyCalendar.v11.suo
+*.suo
+MyCalendar/MyCalendar/Bin/
+MyCalendar/MyCalendar/Obj/
+MyCalendar/packages/
+MyCalendar/WPCalendar/Bin/
+MyCalendar/WPCalendar/Obj/
+MyCalendar/WPCalendar/WPCalendar.csproj.user
+MyCalendar/MyCalendar/MyCalendar.csproj.user

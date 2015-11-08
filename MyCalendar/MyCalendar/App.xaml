@@ -1,0 +1,35 @@
+﻿<Application
+    x:Class="MyCalendar.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone">
+
+    <!--Application Resources-->
+    <Application.Resources>
+        <local:LocalizedStrings xmlns:local="clr-namespace:MyCalendar" x:Key="LocalizedStrings"/>
+
+        <SolidColorBrush x:Name="PhoneForegroundBrush" Color="Black"/>
+
+        <SolidColorBrush x:Name="PhoneForegroundBrush2" Color="DarkGray"/>
+
+        <Style TargetType="TextBox" x:Key="tBoxLarge">
+            <Setter Property="FontFamily" Value="{StaticResource PhoneFontFamilySemiLight}"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="30"/>
+            <Setter Property="Height" Value="80"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="SelectionBackground" Value="#FFD96266" />
+        </Style>
+        
+    </Application.Resources>
+
+    <Application.ApplicationLifetimeObjects>
+        <!--Required object that handles lifetime events for the application-->
+        <shell:PhoneApplicationService
+            Launching="Application_Launching" Closing="Application_Closing"
+            Activated="Application_Activated" Deactivated="Application_Deactivated"/>
+    </Application.ApplicationLifetimeObjects>
+
+</Application>
