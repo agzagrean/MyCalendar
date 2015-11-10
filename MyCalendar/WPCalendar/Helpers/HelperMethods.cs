@@ -17,13 +17,13 @@ namespace WPCalendar.Helpers
         public static EventCalendar GenerateMockCalendar()
         {
             List<EventItem> events = new List<EventItem>();
-            events.Add(new EventItem(new DateTime(2015, 11, 2), new DateTime(2015, 11, 3), "dentist", "", CustomColor.Aquamarine));
+            events.Add(new EventItem(new DateTime(2015, 11, 2), new DateTime(2015, 11, 3), "dentist", "", CustomColor.Aquamarine, EventType.Allday));
 
-            events.Add(new EventItem(new DateTime(2015, 11, 2), new DateTime(2015, 11, 4), "hair stylist", "", CustomColor.SkyBlue));
-            events.Add(new EventItem(new DateTime(2015, 11, 5, 8, 0, 0), new DateTime(2015, 11, 5, 10, 0, 0), "Coffee", "", CustomColor.DarkSalmon));
-            events.Add(new EventItem(new DateTime(2015, 11, 5, 0, 0, 0), new DateTime(2015, 11, 5, 0, 0, 0), "meeting", "", CustomColor.Crimson));
-            events.Add(new EventItem(new DateTime(2015, 11, 8), new DateTime(2015, 11, 15), "training", "",CustomColor.Yellow));
-            events.Add(new EventItem(new DateTime(2015, 11, 30), new DateTime(2015, 12, 15), "exams", "", CustomColor.LightPink));
+            events.Add(new EventItem(new DateTime(2015, 11, 2), new DateTime(2015, 11, 4), "hair stylist", "", CustomColor.SkyBlue, EventType.Allday));
+            events.Add(new EventItem(new DateTime(2015, 11, 5, 8, 0, 0), new DateTime(2015, 11, 5, 10, 0, 0), "Coffee", "", CustomColor.DarkSalmon, EventType.Hourly));
+            events.Add(new EventItem(new DateTime(2015, 11, 5, 0, 0, 0), new DateTime(2015, 11, 5, 0, 0, 0), "meeting", "", CustomColor.Crimson, EventType.Allday));
+            events.Add(new EventItem(new DateTime(2015, 11, 8), new DateTime(2015, 11, 15), "training", "", CustomColor.Yellow, EventType.Allday));
+            events.Add(new EventItem(new DateTime(2015, 11, 30), new DateTime(2015, 12, 15), "exams", "", CustomColor.LightPink, EventType.Allday));
             EventCalendar cal = new EventCalendar();
             cal.AllEvents = events;
             return cal;

@@ -115,7 +115,7 @@
     </Style>
 
     <Style TargetType="local:Calendar">
-        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Background" Value="WhiteSmoke"/>
         <Setter Property="Foreground" Value="{StaticResource PhoneForegroundBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -386,11 +386,11 @@
         </Setter>
     </Style>
 
-    <Style TargetType="local:PopupChild">
+    <Style TargetType="local:PopupAddEditChild">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate  TargetType="local:PopupChild">
-                    <Grid Background="White" Height="Auto" Width="Auto">
+                <ControlTemplate  TargetType="local:PopupAddEditChild">
+                    <Grid Background="WhiteSmoke" Height="Auto" Width="Auto">
                         <Grid x:Name="PopupStyleEditAdd" Margin="10" >
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="100"/>
@@ -587,6 +587,91 @@
     </Style>
 
 
+    <Style TargetType="local:PopupEditDeleteChild">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate  TargetType="local:PopupEditDeleteChild">
+                    <Grid Height="Auto" Width="Auto">
+                        <Grid x:Name="gridDetails" Background="WhiteSmoke" >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="100"/>
+                                <RowDefinition Height="80"/>
+                                <RowDefinition Height="100"/>
+                            </Grid.RowDefinitions>
 
+                            <Grid Grid.Row="0" Background="WhiteSmoke">
+                                <Rectangle VerticalAlignment="Top" 
+                                            HorizontalAlignment="Stretch" 
+                                            Stroke="LightGray" 
+                                            Height="0.7"
+                                            StrokeThickness="0.7" />
+                                <Button x:Name="BtnBackToCalendar"
+                                    Margin="10"
+                                    Background="LightGray"
+                                    HorizontalAlignment="Left">
+                                    <Button.Content>
+                                        <Border>
+                                            <Image Source="Images/Dark/calendar.png" 
+                                           Width="50" Height="50"
+                                           Stretch="Fill"/>
+                                        </Border>
+                                    </Button.Content>
+                                </Button>
+                                <Button x:Name="BtnEditEvent"
+                                     Margin="10,10,120,10"
+                                    Background="LightGray"
+                                    HorizontalAlignment="Right">
+                                    <Button.Content>
+                                        <Image Source="Images/Dark/edit.png" 
+                                           Width="50" Height="50"
+                                           Stretch="Fill"/>
+                                    </Button.Content>
+                                </Button>
+                                <Button x:Name="BtnDeleteEvent" 
+                                    Margin="10"
+                                    Background="LightGray"
+                                    HorizontalAlignment="Right">
+                                    <Button.Content>
+                                        <Image Source="Images/Dark/delete.png" 
+                                           Width="50" Height="50"
+                                           Stretch="Fill"/>
+                                    </Button.Content>
+
+                                </Button>
+                                <Rectangle      VerticalAlignment="Bottom" 
+                                            HorizontalAlignment="Stretch" 
+                                            Margin="10"
+                                            Stroke="LightGray" 
+                                            Height="0.7"
+                                            StrokeThickness="0.7" />
+                            </Grid>
+                            <Border x:Name="BorderTitle" Grid.Row="1" Background="Transparent">
+                                <TextBlock x:Name="TBEventTitle" 
+                                                   Margin="20"
+                                                   Text="{TemplateBinding EventTitle}"
+                                                   FontFamily="Segoe UI Semilight"
+                                                   Foreground="White" FontSize="48"/>
+                            </Border>
+                            <TextBlock x:Name="TBEventLocation" 
+                                           Grid.Row="2"
+                                            Margin="20"
+                                           Text="{TemplateBinding EventLocation}"
+                                           FontFamily="Segoe UI Semilight"
+                                           Foreground="Black" FontSize="22"/>
+                            <TextBlock x:Name="TBEventDate"
+                                            Grid.Row="3"
+                                            Margin="20"
+                                           Text="{TemplateBinding EventDate}"
+                                           FontFamily="Segoe UI Semilight"
+                                           Foreground="Black" FontSize="22" TextWrapping="Wrap"/>
+
+                        </Grid>
+                    </Grid>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 </ResourceDictionary>

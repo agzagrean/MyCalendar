@@ -20,7 +20,7 @@ namespace WPCalendar
     {
         #region Members
 
-        readonly Calendar _owningCalendar;
+        public readonly Calendar _owningCalendar;
 
      
         #endregion
@@ -92,6 +92,17 @@ namespace WPCalendar
             get { return _eventsForDay; }
             set { if (value != _eventsForDay) _eventsForDay = value; }
         }
+
+        protected List<EventItem> AllDayEvents
+        { 
+            get { return EventsForDay.Where(x => x.EventType == EventType.Allday).ToList(); } 
+        }
+
+        protected List<EventItem> HourEvents
+        {
+            get { return EventsForDay.Where(x => x.EventType == EventType.Hourly).ToList(); }
+        }
+
 
         private static void OnIsSelectedChanged(DependencyObject source, DependencyPropertyChangedEventArgs e)
         {

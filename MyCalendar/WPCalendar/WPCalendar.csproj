@@ -133,10 +133,13 @@
     </Compile>
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\CustomColors.cs" />
+    <Compile Include="Helpers\EditAddDeleteHelpers.cs" />
     <Compile Include="Helpers\ExtensionMethods.cs" />
     <Compile Include="Helpers\HelperMethods.cs" />
     <Compile Include="Converters\IDateToBrushConverter.cs" />
     <Compile Include="ISupportCalendarItem.cs" />
+    <Compile Include="Models\EventType.cs" />
+    <Compile Include="PopupEditDeleteChild.cs" />
     <Compile Include="StringLocalization.cs" />
     <Compile Include="Models\DateRange.cs" />
     <Compile Include="Models\EventCalendar.cs">
@@ -147,7 +150,7 @@
     </Compile>
     <Compile Include="MonthChangedEventArgs.cs" />
     <Compile Include="Models\EventDayTypeEnum.cs" />
-    <Compile Include="PopupChild.cs" />
+    <Compile Include="PopupAddEditChild.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\ApplicationResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -192,6 +195,9 @@
     <Content Include="Images\Dark\edit.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\Dark\calendar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\Dark\next.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -205,6 +211,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Light\basecircle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Light\delete.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Light\edit.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Light\calendar.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Light\next.png">

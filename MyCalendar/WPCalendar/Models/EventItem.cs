@@ -29,15 +29,20 @@ namespace WPCalendar.Models
         [DataMember]
         public SolidColorBrush EventColor { get; set; }
 
+        [DataMember]
+        public EventType EventType { get; set; }
+
         public EventItem() { }
 
-        public EventItem(DateTime eventStart, DateTime eventEnd, string eventDescription, string eventLocation, SolidColorBrush eventColor)
+        public EventItem(DateTime eventStart, DateTime eventEnd, string eventDescription, string eventLocation, SolidColorBrush eventColor, EventType eventType)
         {
             this.EventStart = eventStart;
             this.EventEnd = eventEnd;
             this.EventTitle = eventDescription;
             this.EventLocation = eventLocation;
             this.EventColor = eventColor;
+            this.EventType = eventType;
+           
         }
     }
 }

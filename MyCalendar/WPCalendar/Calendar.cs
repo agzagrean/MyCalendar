@@ -111,7 +111,7 @@ namespace WPCalendar
         #region Members
         private Grid _itemsGrid;
         public Grid _hoursDetails;
-        public Popup _editPopup;
+        public Popup popup;
 
         public Grid _dayDetailsGrid;
         public StackPanel _spAllDayEvents;
@@ -910,21 +910,14 @@ namespace WPCalendar
 
         private void InitializeEditPopup()
         {
-            _editPopup = new Popup();
+            popup = new Popup();
 
-            _editPopup.Height = Application.Current.Host.Content.ActualHeight;
-            _editPopup.Width = Application.Current.Host.Content.ActualWidth;
+            popup.Height = Application.Current.Host.Content.ActualHeight;
+            popup.Width = Application.Current.Host.Content.ActualWidth;
 
-            _editPopup.VerticalOffset = 0;
-            _editPopup.HorizontalOffset = 0;
+            popup.VerticalOffset = 0;
+            popup.HorizontalOffset = 0;
         }
-
-        void cancel_Click(object sender, RoutedEventArgs e)
-        {
-            _editPopup.IsOpen = false;
-        }
-
-
         #endregion
 
         #region Event handling

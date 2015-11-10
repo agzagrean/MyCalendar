@@ -26,12 +26,22 @@ namespace WPCalendar
             _hoursDetails.Children.Clear();
             _scrollViewerHours.ScrollToVerticalOffset(0);
 
-            _hoursDetails.Tap -= AddEventItem;
+            UnregisterHourGridTap();
 
             _itemsGrid.GenerateLines();
 
             // reenable gestures
             EnableGesturesSupport();
+        }
+
+
+        public void RegisterHourGridTap()
+        {
+            _hoursDetails.Tap += AddEventItem;
+        }
+        public void UnregisterHourGridTap()
+        {
+            _hoursDetails.Tap -= AddEventItem;
         }
 
         public void SwitchToDetailsView()
@@ -49,7 +59,7 @@ namespace WPCalendar
         #endregion
 
 
-        protected void AddEventItem(object sender, GestureEventArgs e)
+        public void AddEventItem(object sender, GestureEventArgs e)
         {
             Grid grid = sender as Grid;
             Point point = e.GetPosition(grid);
@@ -88,7 +98,7 @@ namespace WPCalendar
 
         private void EditEvent(object sender, RoutedEventArgs e)
         {
-          //todo
+            EditAddDeleteHelpers.AddEditView(sender, _lastItem);
         }
         
 

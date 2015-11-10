@@ -17,10 +17,9 @@ namespace WPCalendar
     public partial class CalendarItem
     {
         public void GenerateDayEvents(List<EventItem> events)
-        {
-            ConstructAllDayEvents(events, 450, Constants.ALL_DAY_EVENT_ITEM_HEIGHT);
-            List<EventItem> hourEvents = events.Where(x => x.EventStart.Hour != x.EventEnd.Hour).ToList();
-            GenerateHourEvents(hourEvents);
+        {       
+            ConstructAllDayEvents(AllDayEvents, 450, Constants.ALL_DAY_EVENT_ITEM_HEIGHT);
+            GenerateHourEvents(HourEvents);
         }
 
         private void ConstructAllDayEvents(List<EventItem> eventsForDay, double width, double heigth)
@@ -142,19 +141,18 @@ namespace WPCalendar
 
         protected void EditEvent(object sender, RoutedEventArgs e)
         {
+            _owningCalendar.UnregisterHourGridTap();
             Button button = sender as Button;
-            EventItem item =button.CommandParameter as EventItem;
+            EventItem item = button.CommandParameter as EventItem;
             if (item != null)
-                _owningCalendar._editPopup.Child = new PopupChild(item);
-            else
-                _owningCalendar._editPopup.Child = new PopupChild();
-            _owningCalendar._editPopup.IsOpen = true;
+            {
+                _owningCalendar.popup.Child = new PopupEditDeleteChild(item, this);
+                _owningCalendar.popup.IsOpen = true;
+            }
+          
         }
 
-        void button1_Click(object sender, RoutedEventArgs e)
-        {
-            _owningCalendar._editPopup.IsOpen = false;
 
-        }
+      
     }
 }

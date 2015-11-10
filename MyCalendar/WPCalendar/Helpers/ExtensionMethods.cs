@@ -14,6 +14,16 @@ namespace WPCalendar.Helpers
 {
     public static class ExtensionMethods
     {
+        public static bool Equals(this EventItem eventItem, EventItem eventItem2)
+        {
+            return eventItem.EventTitle.Equals(eventItem2.EventTitle) &&
+                eventItem.EventLocation.Equals(eventItem2.EventLocation) &&
+                eventItem.EventStart.Equals(eventItem2.EventStart) &&
+                eventItem.EventEnd.Equals(eventItem2.EventEnd) &&
+                eventItem.EventColor.Equals(eventItem2.EventColor) &&
+                eventItem.EventType.Equals(eventItem2.EventType);
+        }
+
         public static void SetDayType(this CalendarItem calendarItem, EventCalendar calendar)
         {
             if (calendar != null && calendar.AllEvents != null)
