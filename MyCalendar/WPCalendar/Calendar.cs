@@ -14,6 +14,7 @@ using WPCalendar.Models;
 using WPCalendar.Helpers;
 using System.Windows.Navigation;
 using Windows.Phone.UI.Input;
+using System.Windows.Controls.Primitives;
 
 
 namespace WPCalendar
@@ -34,7 +35,7 @@ namespace WPCalendar
             var binding = new Binding();
             Loaded += CalendarLoaded;
             SetBinding(PrivateDataContextPropertyProperty, binding);
-            SetBinding(PeriodCalendarPropertyProperty, binding);
+            SetBinding(EventCalendarProperty, binding);
 
             WireUpDataSource(DataContext, DataContext);
             _dateTimeFormatInfo = !CultureInfo.CurrentCulture.IsNeutralCulture ?
@@ -110,6 +111,7 @@ namespace WPCalendar
         #region Members
         private Grid _itemsGrid;
         public Grid _hoursDetails;
+        public Popup _editPopup;
 
         public Grid _dayDetailsGrid;
         public StackPanel _spAllDayEvents;
@@ -216,21 +218,21 @@ namespace WPCalendar
 
         #region EventCalendar
 
-        public EventCalendar EventsProperty
+        public EventCalendar EventsCalendar
         {
-            get { return (EventCalendar)GetValue(PeriodCalendarPropertyProperty); }
+            get { return (EventCalendar)GetValue(EventCalendarProperty); }
             set
             {
 
-                SetValue(PeriodCalendarPropertyProperty, value);
+                SetValue(EventCalendarProperty, value);
             }
         }
 
-        public static readonly DependencyProperty PeriodCalendarPropertyProperty =
-            DependencyProperty.Register("EventsProperty", typeof(EventCalendar), typeof(Calendar),
-            new PropertyMetadata(null, OnPeriodCalendarPropertyChanged));
+        public static readonly DependencyProperty EventCalendarProperty =
+            DependencyProperty.Register("EventsCalendar", typeof(EventCalendar), typeof(Calendar),
+            new PropertyMetadata(null, OnEventCalendarPropertyChanged));
 
-        private static void OnPeriodCalendarPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        private static void OnEventCalendarPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             var calendar = sender as Calendar;
             if (calendar != null)
@@ -518,7 +520,6 @@ namespace WPCalendar
                 }
             }
         }
-
 
         /// <summary>
         /// Currently selected month
@@ -896,11 +897,31 @@ namespace WPCalendar
             _spAllDayEvents = GetTemplateChild("spAllDayEvents") as StackPanel;
             _hoursDetails = GetTemplateChild("gridHours") as Grid;
             _scrollViewerHours = GetTemplateChild("ScrollViewsHours") as ScrollViewer;
+
+            InitializeEditPopup();
+
+            
             SetupDayLabels();
             BuildDates();
             SetYearMonthLabel();
 
             SwitchToMonthView();
+        }
+
+        private void InitializeEditPopup()
+        {
+            _editPopup = new Popup();
+
+            _editPopup.Height = Application.Current.Host.Content.ActualHeight;
+            _editPopup.Width = Application.Current.Host.Content.ActualWidth;
+
+            _editPopup.VerticalOffset = 0;
+            _editPopup.HorizontalOffset = 0;
+        }
+
+        void cancel_Click(object sender, RoutedEventArgs e)
+        {
+            _editPopup.IsOpen = false;
         }
 
 
@@ -1356,7 +1377,7 @@ namespace WPCalendar
 
 
             item.DayNumber = addedDays;
-            item.SetDayType(this.EventsProperty);
+            item.SetDayType(this.EventsCalendar);
 
             item.SetBackcolor();
             item.SetForecolor();

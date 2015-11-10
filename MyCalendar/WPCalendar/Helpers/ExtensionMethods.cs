@@ -32,6 +32,14 @@ namespace WPCalendar.Helpers
             return start <= date && end >= date;
         }
 
+        public static bool IsEqual(this DateTime date, DateTime dateToCompare)
+        {
+            DateTime date1 = new DateTime(date.Year, date.Month, date.Day);
+            DateTime date2 = new DateTime(dateToCompare.Year, dateToCompare.Month, dateToCompare.Day);
+
+            return date1 == date2;
+        }
+
 
         #region Grid
         public static void GenerateLines(this Grid grid)

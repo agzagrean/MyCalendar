@@ -21,8 +21,8 @@ namespace MyCalendar
         {
             InitializeComponent();
 
-             Cal.EventsProperty = null;
-             Cal.EventsProperty = App.MainViewModel.CustomCalendar;
+             Cal.EventsCalendar = null;
+             Cal.EventsCalendar = App.MainViewModel.CustomCalendar;
              Cal.Refresh();
         }
 

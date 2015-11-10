@@ -3,15 +3,22 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
     xmlns:vsm="clr-namespace:System.Windows;assembly=System.Windows"
     xmlns:local="clr-namespace:WPCalendar"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:converters="clr-namespace:WPCalendar.Converters">
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/WPCalendar;component/Themes/CustomColors.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    
     <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     <converters:ColorConverter x:Name="ColorConverter"/>
-
+   
+    
+    <!--Custom colours-->
    
     <SolidColorBrush x:Name="PhoneForegroundBrush2" Color="DarkGray"/>
     <SolidColorBrush x:Name="PhoneForegroundBrush1" Color="Black"/>
-    
+
     <Style x:Key="RoundButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderBrush" Value="{StaticResource PhoneForegroundBrush}"/>
@@ -62,6 +69,51 @@
             </Setter>
         </Style>
 
+    <Style x:Key="ButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="LightGray"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid Background="Transparent">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="MouseOver"/>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentContainer">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneButtonBasePressedForegroundBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="ButtonBackground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneForegroundBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentContainer">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneDisabledBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ButtonBackground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneDisabledBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="ButtonBackground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Border x:Name="ButtonBackground" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}"  Margin="{StaticResource PhoneTouchTargetOverhang}">
+                            <ContentControl x:Name="ContentContainer" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style TargetType="local:Calendar">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="{StaticResource PhoneForegroundBrush}"/>
@@ -83,7 +135,7 @@
                                    Text="{TemplateBinding YearMonthLabel}" FontSize="{StaticResource PhoneFontSizeMediumLarge}"
                                    Foreground="#BF5279"
                                    Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                         <Button
+                        <Button
                             Width="72" Height="72"
                             Grid.Column="0" 
                            x:Name="PreviousMonthButton" 
@@ -97,7 +149,6 @@
                                             ImageSource="/Images/Light/back.png"/>
                             </Button.Background>
                         </Button>
-                        
                         <Button
                             Width="72" Height="72"
                             Grid.Column="2" 
@@ -112,7 +163,7 @@
                                             ImageSource="/Images/Light/next.png"/>
                             </Button.Background>
                         </Button>
-                      
+
                         <Grid 
                             x:Name="ItemsGrid"
                             Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
@@ -144,7 +195,7 @@
                             <TextBlock Text="{TemplateBinding Thursday}" FontFamily="Segoe UI Semilight" Foreground="{StaticResource PhoneForegroundBrush1}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="5"/>
                             <TextBlock Text="{TemplateBinding Friday}" FontFamily="Segoe UI Semilight" Foreground="{StaticResource PhoneForegroundBrush1}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="6"/>
                             <TextBlock Text="{TemplateBinding Saturday}"  FontFamily="Segoe UI Semilight" Foreground="{StaticResource PhoneForegroundBrush2}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="7"/>
-                            </Grid>
+                        </Grid>
 
                         <Grid x:Name="DayDetailsGrid" 
                               Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="3"  Visibility="Collapsed" >
@@ -167,7 +218,7 @@
                                             ImageSource="/Images/Light/back.png"/>
                                 </Button.Background>
                             </Button>
-                            
+
                             <StackPanel  Grid.Row="0" Margin="9,-7,0,0" Grid.Column="1">
                                 <TextBlock Text="{TemplateBinding DayOfTheWeek}"   
                                            Foreground="{StaticResource PhoneForegroundBrush2}" />
@@ -175,7 +226,7 @@
                                     Text="{TemplateBinding DayTitle}" 
                                     Style="{StaticResource PhoneTextTitle2Style}" 
                                     Foreground="{StaticResource PhoneForegroundBrush2}"/>
-                               
+
                             </StackPanel>
                             <Rectangle Grid.Row="0" VerticalAlignment="Bottom" Grid.ColumnSpan="2"
                                             HorizontalAlignment="Stretch" 
@@ -188,7 +239,7 @@
                                     Background="Transparent"
                                     Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                             </StackPanel>
-                            
+
                             <ScrollViewer x:Name="ScrollViewsHours" 
                                           AllowDrop="False"
                                           Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
@@ -199,36 +250,60 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="1"/>         
-                                        <!--00-->    <RowDefinition Height="*"/>    
-										<!--01-->    <RowDefinition Height="*"/>    
-										<!--02-->    <RowDefinition Height="*"/>    
-										<!--03-->    <RowDefinition Height="*"/>    
-										<!--04-->    <RowDefinition Height="*"/>    
-										<!--05-->    <RowDefinition Height="*"/>    
-										<!--06-->    <RowDefinition Height="*"/>    
-										<!--07-->    <RowDefinition Height="*"/>    
-										<!--08-->    <RowDefinition Height="*"/>    
-										<!--09-->    <RowDefinition Height="*"/>    
-										<!--10-->    <RowDefinition Height="*"/>    
-										<!--11-->    <RowDefinition Height="*"/>    
-										<!--12-->    <RowDefinition Height="*"/>    
-										<!--13-->    <RowDefinition Height="*"/>    
-										<!--14-->    <RowDefinition Height="*"/>    
-										<!--15-->    <RowDefinition Height="*"/>    
-										<!--16-->    <RowDefinition Height="*"/>    
-										<!--17-->    <RowDefinition Height="*"/>    
-										<!--18-->    <RowDefinition Height="*"/>    
-										<!--19-->    <RowDefinition Height="*"/>    
-										<!--20-->    <RowDefinition Height="*"/>    
-										<!--21-->    <RowDefinition Height="*"/>    
-										<!--22-->    <RowDefinition Height="*"/>    
-										<!--23-->    <RowDefinition Height="*"/>
+                                        <RowDefinition Height="1"/>
+                                        <!--00-->
+                                        <RowDefinition Height="*"/>
+                                        <!--01-->
+                                        <RowDefinition Height="*"/>
+                                        <!--02-->
+                                        <RowDefinition Height="*"/>
+                                        <!--03-->
+                                        <RowDefinition Height="*"/>
+                                        <!--04-->
+                                        <RowDefinition Height="*"/>
+                                        <!--05-->
+                                        <RowDefinition Height="*"/>
+                                        <!--06-->
+                                        <RowDefinition Height="*"/>
+                                        <!--07-->
+                                        <RowDefinition Height="*"/>
+                                        <!--08-->
+                                        <RowDefinition Height="*"/>
+                                        <!--09-->
+                                        <RowDefinition Height="*"/>
+                                        <!--10-->
+                                        <RowDefinition Height="*"/>
+                                        <!--11-->
+                                        <RowDefinition Height="*"/>
+                                        <!--12-->
+                                        <RowDefinition Height="*"/>
+                                        <!--13-->
+                                        <RowDefinition Height="*"/>
+                                        <!--14-->
+                                        <RowDefinition Height="*"/>
+                                        <!--15-->
+                                        <RowDefinition Height="*"/>
+                                        <!--16-->
+                                        <RowDefinition Height="*"/>
+                                        <!--17-->
+                                        <RowDefinition Height="*"/>
+                                        <!--18-->
+                                        <RowDefinition Height="*"/>
+                                        <!--19-->
+                                        <RowDefinition Height="*"/>
+                                        <!--20-->
+                                        <RowDefinition Height="*"/>
+                                        <!--21-->
+                                        <RowDefinition Height="*"/>
+                                        <!--22-->
+                                        <RowDefinition Height="*"/>
+                                        <!--23-->
+                                        <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
 
                                 </Grid>
                             </ScrollViewer>
-                                                     
+
                             <Rectangle Grid.Row="3" VerticalAlignment="Bottom" Grid.ColumnSpan="2"
                                             HorizontalAlignment="Stretch" 
                                             Margin="-9, 10, 0, 10"
@@ -310,6 +385,207 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="local:PopupChild">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate  TargetType="local:PopupChild">
+                    <Grid Background="White" Height="Auto" Width="Auto">
+                        <Grid x:Name="PopupStyleEditAdd" Margin="10" >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="100"/>
+                                <RowDefinition Height="80"/>
+                                <RowDefinition Height="80"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="80"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="80"/>
+                                <RowDefinition Height="80"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="CancelButton" Height="Auto" Width="Auto" Margin="0,10,0,0" 
+                                Style="{StaticResource ButtonStyle}" Grid.Row="0" Grid.Column="0" >
+                                <Button.Content>
+                                    <Grid Height="Auto" Width="Auto">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Image Source="Images/Dark/cancel.png"
+                                               Stretch="UniformToFill" Height="40" Width="40" Margin="0,2,0,0"
+                                               Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <TextBlock Text="CANCEL"
+                                               VerticalAlignment="Center"
+                                               Grid.Column="1"/>
+                                    </Grid>
+                                </Button.Content>
+                            </Button>
+                            <Button x:Name="SaveButton"
+                                Height="Auto" Width="Auto" Margin="0,10,0,0" 
+                                Style="{StaticResource ButtonStyle}" Grid.Row="0" Grid.Column="1" >
+                                <Button.Content>
+                                    <Grid Height="Auto" Width="Auto">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Image Source="Images/Dark/check.png"
+                                           Stretch="UniformToFill" Height="40" Width="40" Margin="0,2,0,0"
+                                           Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <TextBlock Text="DONE"
+                                   VerticalAlignment="Center"
+                                   Grid.Column="1"/>
+                                    </Grid>
+                                </Button.Content>
+                            </Button>
+                            <TextBox x:Name="TbName"
+                                     Grid.Row="1" Grid.ColumnSpan="2"
+                                     Text="{TemplateBinding EventTitle}"
+                                     Foreground="Gray" 
+                                     Background="White"
+                                     SelectionBackground="Black"
+                                     FontFamily="Segoe UI Semilight"
+                                     BorderThickness="0,0,0,2"
+                                     BorderBrush="DarkGray"/>
+                            <TextBox x:Name="TbLocation"
+                                     Grid.Row="2" Grid.ColumnSpan="2" 
+                                     Text="{TemplateBinding EventLocation}"
+                                     Foreground="Gray" 
+                                     Background="White"
+                                     SelectionBackground="Black"
+                                     FontFamily="Segoe UI Semilight"
+                                     BorderThickness="0,0,0,2"
+                                     BorderBrush="DarkGray"/>
+                            <TextBlock Grid.Row="3" Grid.ColumnSpan="2"
+                                       Margin="10,0,0,0"
+                                       FontSize="22"
+                                       FontFamily="Segoe UI Semilight"
+                                       Foreground="DarkGray"
+                                       Text="FROM"/>
+                            <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.ColumnSpan="2"  >
+                                <toolkit:DatePicker  
+                                    x:Name="startDatePicker"
+                                    Foreground="Black" 
+                                    BorderBrush="DarkGray"
+                                    BorderThickness="0,0,0,2"/>
+                                <toolkit:TimePicker  
+                                     x:Name="startTimePicker"
+                                     Foreground="Black" 
+                                     BorderBrush="DarkGray"
+                                     BorderThickness="0,0,0,2"/>
+                            </StackPanel>
+                            <TextBlock Grid.Row="5" Grid.ColumnSpan="2"  
+                                       Margin="10,0,0,0"
+                                       FontSize="22"
+                                       FontFamily="Segoe UI Semilight"
+                                       Foreground="DarkGray"
+                                       Text="TO"/>
+                            <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.ColumnSpan="2"  >
+                                <toolkit:DatePicker 
+                                     x:Name="endDatePicker"
+                                     Foreground="Black" 
+                                     BorderBrush="DarkGray"
+                                     BorderThickness="0,0,0,2"/>
+                                <toolkit:TimePicker
+                                     x:Name="endTimePicker"
+                                     Foreground="Black" 
+                                     BorderBrush="DarkGray"
+                                     BorderThickness="0,0,0,2"/>
+                            </StackPanel>
+                            <CheckBox 
+                                x:Name="CBAllDayEvents"
+                                Grid.Row="7" Grid.ColumnSpan="2"
+                                Content="ALL DAY" 
+                                Foreground="DarkGray"  
+                                BorderBrush="DarkGray"/>
+                            <Grid x:Name="EventColoursGrid"
+                                Grid.Row="8" Grid.RowSpan="2" Grid.ColumnSpan="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Border 
+                                        x:Name="SelectedEventColor"
+                                        Grid.Row="0" Grid.Column="0"
+                                        Height="40" Width="40"
+                                        HorizontalAlignment="Left"
+                                        BorderBrush="DarkGray"
+                                        BorderThickness="1" 
+                                        Margin="10">
+                                 
+                                    <Image Source="Images/Dark/check.png"
+                                           Stretch="UniformToFill" />
+                                </Border>
+                                <Border 
+                                    Grid.Row="0" Grid.Column="0"
+                                    HorizontalAlignment="Right"
+                                    Background="{StaticResource LightGray}" 
+                                    Height="40" Width="2" Margin="10,0,20,0" />                               
+                                <Rectangle 
+                                    Grid.Row="0" Grid.Column="1"
+                                    Fill="{StaticResource SteelBlue}" 
+                                    Height="40" Width="40"/>
+                                <Rectangle 
+                                    Grid.Row="0" Grid.Column="2"
+                                    Fill="{StaticResource SkyBlue}" 
+                                    Height="40" Width="40" />
+                                <Rectangle 
+                                    Grid.Row="0" Grid.Column="3"
+                                    Fill="{StaticResource Aquamarine}" 
+                                    Height="40" Width="40"/>
+                                <Rectangle
+                                    Grid.Row="0" Grid.Column="4"
+                                    Fill="{StaticResource CornflowerBlue}" 
+                                    Height="40" Width="40" />
+                                <Rectangle 
+                                    Grid.Row="0" Grid.Column="5"
+                                    Fill="{StaticResource MediumSeaGreen}" 
+                                    Height="40" Width="40"/>
+                                <Rectangle 
+                                    Grid.Row="1" Grid.Column="0" Margin="-5,0,0,0"
+                                    Fill="{StaticResource Yellow}" 
+                                    Height="40" Width="40" />
+                                <Rectangle 
+                                    Grid.Row="1" Grid.Column="1"
+                                    Fill="{StaticResource LightPink}" 
+                                    Height="40" Width="40" />
+                                <Rectangle 
+                                    Grid.Row="1" Grid.Column="2"
+                                    Fill="{StaticResource DarkSalmon}" 
+                                    Height="40" Width="40"/>
+                                <Rectangle 
+                                    Grid.Row="1" Grid.Column="3"
+                                    Fill="{StaticResource Crimson}" 
+                                    Height="40" Width="40"/>
+                                <Rectangle 
+                                    Grid.Row="1" Grid.Column="4"
+                                    Fill="{StaticResource LightGray}" 
+                                    Height="40" Width="40" />
+                                <Rectangle 
+                                    Grid.Row="1" Grid.Column="5"
+                                    Fill="{StaticResource Thistle}" 
+                                    Height="40" Width="40" />
+
+                            </Grid>                  
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 
 
 

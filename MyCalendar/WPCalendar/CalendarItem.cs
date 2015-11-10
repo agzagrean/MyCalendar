@@ -22,6 +22,7 @@ namespace WPCalendar
 
         readonly Calendar _owningCalendar;
 
+     
         #endregion
 
         #region Constructor

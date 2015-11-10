@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -35,14 +36,16 @@ namespace WPCalendar
             Button btnDayEvent;
             for (index = 0; index < maxlines; index++)
             {
+                EventItem item = eventsForDay[index];
+
                 btnDayEvent = new Button()
                     {
                         Width = width,
                         Height = heigth,
                         Margin = new Thickness(0, -10, 0, 0),
                         FontSize = 16,
-                        Background = eventsForDay[index].EventColor,
-                        Content = eventsForDay[index].EventTitle,
+                        Background = item.EventColor,
+                        Content = item.EventTitle,
                         Foreground = CustomColor.White,
                         BorderThickness = new Thickness(0),
                         VerticalAlignment = System.Windows.VerticalAlignment.Top,
@@ -50,6 +53,8 @@ namespace WPCalendar
                         HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left,
 
                     };
+
+                btnDayEvent.CommandParameter = item;
                 btnDayEvent.Click += EditEvent;
                 _owningCalendar._spAllDayEvents.Children.Add(btnDayEvent);
             }
@@ -130,14 +135,26 @@ namespace WPCalendar
                 button.SetValue(Grid.RowSpanProperty, hours);
                 button.SetValue(Grid.ColumnProperty, 1);
                 _owningCalendar._hoursDetails.Children.Add(button);
+                button.CommandParameter = item;
                 button.Click += EditEvent;
             }
         }
 
-
         protected void EditEvent(object sender, RoutedEventArgs e)
         {
-            //todo
+            Button button = sender as Button;
+            EventItem item =button.CommandParameter as EventItem;
+            if (item != null)
+                _owningCalendar._editPopup.Child = new PopupChild(item);
+            else
+                _owningCalendar._editPopup.Child = new PopupChild();
+            _owningCalendar._editPopup.IsOpen = true;
+        }
+
+        void button1_Click(object sender, RoutedEventArgs e)
+        {
+            _owningCalendar._editPopup.IsOpen = false;
+
         }
     }
 }

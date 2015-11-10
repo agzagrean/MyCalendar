@@ -12,6 +12,7 @@ namespace WPCalendar
 {
     public partial class Calendar
     {
+
         #region Switch views
 
         public void SwitchToMonthView()
@@ -62,12 +63,10 @@ namespace WPCalendar
                 FontSize = Constants.EVENT_FONT_SIZE,
                 Content = eventTitle,
                 Foreground = CustomColor.White,
-                Background = CustomColor.DarkBlue,
+                Background = CustomColor.CornflowerBlue,
                 HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left
             };
             button.Click += EditEvent;
-
-
 
             int hour = (int)Math.Ceiling((point.Y) / Constants.GRID_HOURS_CELL_HEIGHT);
 

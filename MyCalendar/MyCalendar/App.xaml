@@ -7,6 +7,11 @@
 
     <!--Application Resources-->
     <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/WPCalendar;component/Themes/CustomColors.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+       
         <local:LocalizedStrings xmlns:local="clr-namespace:MyCalendar" x:Key="LocalizedStrings"/>
 
         <SolidColorBrush x:Name="PhoneForegroundBrush" Color="Black"/>
@@ -23,7 +28,10 @@
             <Setter Property="SelectionBackground" Value="#FFD96266" />
         </Style>
         
+        
+        </ResourceDictionary>
     </Application.Resources>
+    
 
     <Application.ApplicationLifetimeObjects>
         <!--Required object that handles lifetime events for the application-->

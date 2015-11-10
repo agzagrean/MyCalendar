@@ -4,58 +4,60 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 
 namespace WPCalendar.Helpers
 {
     public static class CustomColor
     {
-        public static SolidColorBrush Blue
+        public static SolidColorBrush Aquamarine
         {
-            get
-            {
-                return new SolidColorBrush(Color.FromArgb(255, 135, 206, 235));
-            }
+            get { return Application.Current.Resources["Aquamarine"] as SolidColorBrush; }
         }
-        public static SolidColorBrush Aqua
+        public static SolidColorBrush SteelBlue
         {
-            get { return new SolidColorBrush(Color.FromArgb(255, 0, 206, 209)); }
+            get { return Application.Current.Resources["SteelBlue"] as SolidColorBrush; }
         }
-        public static SolidColorBrush Green
+        public static SolidColorBrush SkyBlue
         {
-            get { return new SolidColorBrush(Color.FromArgb(255, 152, 251, 152)); }
+            get { return Application.Current.Resources["SkyBlue"] as SolidColorBrush; }
         }
-        public static SolidColorBrush DarkGreen
+        public static SolidColorBrush CornflowerBlue
         {
-            get { return new SolidColorBrush(Color.FromArgb(255, 50, 205, 50)); }
+            get { return Application.Current.Resources["CornflowerBlue"] as SolidColorBrush; }
+        }
+        public static SolidColorBrush MediumSeaGreen
+        {
+            get { return Application.Current.Resources["MediumSeaGreen"] as SolidColorBrush; }
         }
         public static SolidColorBrush Yellow
         {
-            get { return new SolidColorBrush(Color.FromArgb(255, 240, 230, 140)); }
+            get { return Application.Current.Resources["Yellow"] as SolidColorBrush; }
         }
-        public static SolidColorBrush Peach
+        public static SolidColorBrush LightPink
         {
-            get { return new SolidColorBrush(Color.FromArgb(255, 250, 128, 114)); }
+            get { return Application.Current.Resources["LightPink"] as SolidColorBrush; }
         }
-        public static SolidColorBrush Marsala
+        public static SolidColorBrush DarkSalmon
         {
-            get { return new SolidColorBrush(Color.FromArgb(255, 220, 20, 60)); }
+            get { return Application.Current.Resources["DarkSalmon"] as SolidColorBrush; }
         }
-        public static SolidColorBrush Lavender
+        public static SolidColorBrush Crimson
         {
-            get { return new SolidColorBrush(Color.FromArgb(255, 218, 112, 214)); }
+            get { return Application.Current.Resources["Crimson"] as SolidColorBrush; }
         }
-        public static SolidColorBrush Gray
+        public static SolidColorBrush LightGray
         {
-            get { return new SolidColorBrush(Color.FromArgb(255, 192, 192, 192)); }
+            get { return Application.Current.Resources["LightGray"] as SolidColorBrush; }
         }
-        public static SolidColorBrush DarkBlue
+        public static SolidColorBrush Thistle
         {
-            get { return new SolidColorBrush(Color.FromArgb(255, 65, 105, 225)); }
+            get { return Application.Current.Resources["DeepSkyBlue"] as SolidColorBrush; }
         }
         public static SolidColorBrush White
         {
-            get { return new SolidColorBrush(Color.FromArgb(255, 255, 255, 255)); }
+            get { return Application.Current.Resources["White"] as SolidColorBrush; }
         }
     }
 }

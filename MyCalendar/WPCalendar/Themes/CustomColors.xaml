@@ -1,0 +1,16 @@
+﻿<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/client/2007" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" >
+    <SolidColorBrush x:Name="Aquamarine" Color="Aquamarine"/>
+    <SolidColorBrush x:Name="SteelBlue" Color="SteelBlue"/>
+    <SolidColorBrush x:Name="SkyBlue" Color="SkyBlue"/>
+    <SolidColorBrush x:Name="CornflowerBlue" Color="CornflowerBlue"/>
+    <SolidColorBrush x:Name="MediumSeaGreen" Color="MediumSeaGreen"/>
+    <SolidColorBrush x:Name="Yellow" Color="YellowGreen"/>
+    <SolidColorBrush x:Name="LightPink" Color="LightPink"/>
+    <SolidColorBrush x:Name="DarkSalmon" Color="DarkSalmon"/>
+    <SolidColorBrush x:Name="Crimson" Color="Crimson"/>
+    <SolidColorBrush x:Name="LightGray" Color="LightGray"/>
+    <SolidColorBrush x:Name="Thistle" Color="Thistle"/>
+    <SolidColorBrush x:Name="White" Color="White"/>
+</ResourceDictionary>
