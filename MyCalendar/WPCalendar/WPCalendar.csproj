@@ -131,6 +131,8 @@
     <Compile Include="Converters\ColorConverter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converters\EventTypeToCheckedConverter.cs" />
+    <Compile Include="Converters\EventTypeToVisibilityConverter.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\CustomColors.cs" />
     <Compile Include="Helpers\EditAddDeleteHelpers.cs" />

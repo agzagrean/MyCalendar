@@ -10,6 +10,8 @@ using WPCalendar.Helpers;
 using WPCalendar.Models;
 using System.Linq;
 using System.Windows.Input;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace WPCalendar
 {
@@ -85,32 +87,28 @@ namespace WPCalendar
        
         internal static readonly DependencyProperty IsSelectedProperty =
             DependencyProperty.Register("IsSelected", typeof(bool), typeof(CalendarItem), new PropertyMetadata(false, OnIsSelectedChanged));
- 
-        private List<EventItem> _eventsForDay;
+
+        private List<EventItem> eventsForDay;
         public List<EventItem> EventsForDay
         {
-            get { return _eventsForDay; }
-            set { if (value != _eventsForDay) _eventsForDay = value; }
+            get { return eventsForDay; }
+            set
+            {
+              
+                if (!value.Equals( eventsForDay) && value != null)
+                {
+                    eventsForDay = value;
+                }
+            }
         }
-
-        protected List<EventItem> AllDayEvents
-        { 
-            get { return EventsForDay.Where(x => x.EventType == EventType.Allday).ToList(); } 
-        }
-
-        protected List<EventItem> HourEvents
-        {
-            get { return EventsForDay.Where(x => x.EventType == EventType.Hourly).ToList(); }
-        }
-
 
         private static void OnIsSelectedChanged(DependencyObject source, DependencyPropertyChangedEventArgs e)
         {
             var item = source as CalendarItem;
             if (item != null)
             {
-                item.SetBackcolor();
-                item.SetForecolor();
+               // item.SetBackcolor();
+               // item.SetForecolor();
             }
         }
 
@@ -208,12 +206,19 @@ namespace WPCalendar
         public void DisplayDetailView()
         {
             _owningCalendar.SwitchToDetailsView();
- 
+
+            GenerateDayEvents();
             GenerateHours();
-            GenerateDayEvents(EventsForDay);   
         }
 
-     
+        public void Refresh()
+        {
+            //reconstruct details grid
+            _owningCalendar.ClearDetailsGrid();
+            DisplayDetailView();
+        }
+
+    
         #endregion
 
       

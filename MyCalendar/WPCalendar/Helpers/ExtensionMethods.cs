@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,9 +15,37 @@ namespace WPCalendar.Helpers
 {
     public static class ExtensionMethods
     {
+        public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> items)
+        {
+            if (items == null) return null;
+            var observable = new ObservableCollection<T>();
+            foreach (var item in items)
+                observable.Add(item);
+            return observable;
+        }
+
+
+        public static bool NeedsUpdate(this EventItem eventItem, string EventTitle, string EventLocation, DateTime EventStart, DateTime EventEnd, Brush EventColor)
+        {
+            if (eventItem.EventTitle == EventTitle && eventItem.EventLocation == EventLocation && eventItem.EventStart == EventStart && eventItem.EventEnd == EventEnd && eventItem.EventColor == EventColor)
+                return false;
+            return true;
+        }
+
+        public static void UpdateValues(this EventItem eventItem, string EventTitle, string EventLocation, DateTime EventStart, DateTime EventEnd, Brush EventColor)
+        {
+            eventItem.EventTitle = EventTitle;
+            eventItem.EventLocation = EventLocation;
+            eventItem.EventStart = EventStart;
+            eventItem.EventEnd = EventEnd;
+            eventItem.EventColor = (SolidColorBrush)EventColor;
+        }
+
         public static bool Equals(this EventItem eventItem, EventItem eventItem2)
         {
-            return eventItem.EventTitle.Equals(eventItem2.EventTitle) &&
+            return
+                 eventItem.EventId.Equals(eventItem2.EventId) &&
+                eventItem.EventTitle.Equals(eventItem2.EventTitle) &&
                 eventItem.EventLocation.Equals(eventItem2.EventLocation) &&
                 eventItem.EventStart.Equals(eventItem2.EventStart) &&
                 eventItem.EventEnd.Equals(eventItem2.EventEnd) &&
@@ -28,9 +57,10 @@ namespace WPCalendar.Helpers
         {
             if (calendar != null && calendar.AllEvents != null)
             {
-                List<EventItem> evItems = HelperMethods.GetEventItemsForDate(calendarItem.ItemDate, calendar.AllEvents);
-                calendarItem.EventsForDay = evItems;
-                calendarItem.BackgroundBrush = HelperMethods.GetBackgroundBrush(evItems, calendarItem.ItemDate, calendarItem.IsSelected);
+                List<EventItem> events = HelperMethods.GetEventItemsForDate(calendarItem.ItemDate, calendar.AllEvents);
+                calendarItem.EventsForDay = events;
+
+                calendarItem.BackgroundBrush = HelperMethods.GetBackgroundBrush(events, calendarItem.ItemDate, calendarItem.IsSelected);
             }
         }
 

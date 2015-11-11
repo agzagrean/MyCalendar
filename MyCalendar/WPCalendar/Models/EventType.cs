@@ -8,7 +8,7 @@ namespace WPCalendar.Models
 {
     public enum EventType
     {
-        Allday =0,
-        Hourly =1,
+        Allday = 0,
+        Hourly = 1,
     }
 }

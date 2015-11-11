@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ using WPCalendar.Models;
 
 namespace WPCalendar
 {
-    public class PopupEditDeleteChild : Control
+    public class PopupEditDeleteChild : Control, INotifyPropertyChanged
     {
         #region Private
 
@@ -53,14 +54,39 @@ namespace WPCalendar
         public static readonly DependencyProperty EventDateProperty =
             DependencyProperty.Register("EventDate", typeof(string), typeof(PopupEditDeleteChild), new PropertyMetadata(""));
 
+        private SolidColorBrush _eventColor;
+        public SolidColorBrush EventColor
+        {
+            get
+            { return _eventColor; }
+            set
+            {
+                if (value != _eventColor)
+                    _eventColor = value;
+                NotifyPropertyChanged("EventColor");
+            }
+        }
+    
         #endregion
 
-        public PopupEditDeleteChild(EventItem item,CalendarItem calendarItem)
+        #region Event handler
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(String propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (null != handler)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+        #endregion
+        public PopupEditDeleteChild(EventItem item, CalendarItem calendarItem)
         {
             DefaultStyleKey = typeof(PopupEditDeleteChild);
             eventItem = item;
             EventTitle = item.EventTitle;
             EventLocation = item.EventLocation;
+            EventColor = item.EventColor;
             string dateTimeFormat = "ddd, dd MMM, HH:mm";
             EventDate = string.Format("{0} - {1}", eventItem.EventStart.ToString(dateTimeFormat), eventItem.EventEnd.ToString(dateTimeFormat));
             _owningCalendarItem = calendarItem;
@@ -78,10 +104,6 @@ namespace WPCalendar
         {
             this.Height = (this.Parent as Popup).Height;
             this.Width = (this.Parent as Popup).Width;
-            borderTitle.Background =
-                btnBackToCalendar.Background=
-                btnDeleteEvent.Background=
-                btnEditEvent.Background= eventItem.EventColor;
 
             btnEditEvent.CommandParameter = eventItem;
         }
@@ -111,10 +133,20 @@ namespace WPCalendar
         {
             _owningCalendarItem._owningCalendar.RegisterHourGridTap();
 
-            //do delete
+            if (_owningCalendarItem.EventsForDay.Contains(eventItem))
+            {
+                _owningCalendarItem.EventsForDay.Remove(eventItem);
+                _owningCalendarItem._owningCalendar.EventsCalendar.AllEvents.Remove(eventItem);
+            }
+
+            //refresh calendarItem details
+            _owningCalendarItem.Refresh();
+            //refresh calendar details
+            _owningCalendarItem._owningCalendar.Refresh();
 
             (this.Parent as Popup).IsOpen = false;
         }
+
 
         void EditEvent(object sender, System.Windows.RoutedEventArgs e)
         {

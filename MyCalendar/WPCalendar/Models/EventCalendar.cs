@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -28,6 +30,7 @@ namespace WPCalendar.Models
                     allEvents = value;
                 else
                     allEvents = new List<EventItem>();
+              
                 OnPropertyChanged("AllEvents");
             }
         }
@@ -82,7 +85,7 @@ namespace WPCalendar.Models
             {
                 if (futureEvents == null || futureEvents.Count == 0)
                 {
-                    futureEvents = EventsAfter(DateTime.Today);
+                //    futureEvents = EventsAfter(DateTime.Today);
                 }
                 return futureEvents;
             }
@@ -101,7 +104,7 @@ namespace WPCalendar.Models
             {
                 if (pastEvents == null || pastEvents.Count == 0)
                 {
-                    pastEvents = EventsBefore(DateTime.Today);
+                //    pastEvents = EventsBefore(DateTime.Today);
                 }
                 return pastEvents;
             }
@@ -117,7 +120,7 @@ namespace WPCalendar.Models
         #endregion
 
         #region  Private Methods
-        private List<EventItem> EventsAfter(DateTime dateTime)
+      /*  private List<EventItem> EventsAfter(DateTime dateTime)
         {
             List<EventItem> future = new List<EventItem>();
             List<EventItem> allEvents = new List<EventItem>();
@@ -142,6 +145,8 @@ namespace WPCalendar.Models
             past = events.Where(x => x.EventStart < dateTime).ToList();
             return past;
         }
+       * 
+       * */
         #endregion
 
         #region event handlers
@@ -153,16 +158,19 @@ namespace WPCalendar.Models
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null)
             {
-                EventsAfter(DateTime.Today);
                 handler(this, new PropertyChangedEventArgs(name));
             }
         }
+
+       
 
 
         #endregion
 
 
-
+        public EventCalendar()
+        {
+        }
      
 
        

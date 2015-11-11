@@ -20,11 +20,7 @@ namespace WPCalendar
             _itemsGrid.Visibility = previousButton.Visibility = nextButton.Visibility = tbYearMonthLabel.Visibility = Visibility.Visible;
             _dayDetailsGrid.Visibility = backToMonthViewButton.Visibility = Visibility.Collapsed;
 
-            _spAllDayEvents.Height = 0;
-            _spAllDayEvents.Children.Clear();
-
-            _hoursDetails.Children.Clear();
-            _scrollViewerHours.ScrollToVerticalOffset(0);
+            ClearDetailsGrid();
 
             UnregisterHourGridTap();
 
@@ -32,6 +28,15 @@ namespace WPCalendar
 
             // reenable gestures
             EnableGesturesSupport();
+        }
+
+        public void ClearDetailsGrid()
+        {
+            _spAllDayEvents.Height = 0;
+            _spAllDayEvents.Children.Clear();
+
+            _hoursDetails.Children.Clear();
+            _scrollViewerHours.ScrollToVerticalOffset(0);
         }
 
 
@@ -50,7 +55,6 @@ namespace WPCalendar
             _dayDetailsGrid.Visibility = backToMonthViewButton.Visibility = Visibility.Visible;
 
             _hoursDetails.GenerateLines();
-          
             _hoursDetails.Tap += AddEventItem;
 
             //you don't want flicking years when scrolling into day details

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,30 +18,27 @@ namespace WPCalendar.Helpers
         public static EventCalendar GenerateMockCalendar()
         {
             List<EventItem> events = new List<EventItem>();
-            events.Add(new EventItem(new DateTime(2015, 11, 2), new DateTime(2015, 11, 3), "dentist", "", CustomColor.Aquamarine, EventType.Allday));
+            events.Add(new EventItem(Guid.NewGuid(), new DateTime(2015, 11, 2), new DateTime(2015, 11, 3), "dentist", "", CustomColor.Aquamarine, EventType.Allday));
 
-            events.Add(new EventItem(new DateTime(2015, 11, 2), new DateTime(2015, 11, 4), "hair stylist", "", CustomColor.SkyBlue, EventType.Allday));
-            events.Add(new EventItem(new DateTime(2015, 11, 5, 8, 0, 0), new DateTime(2015, 11, 5, 10, 0, 0), "Coffee", "", CustomColor.DarkSalmon, EventType.Hourly));
-            events.Add(new EventItem(new DateTime(2015, 11, 5, 0, 0, 0), new DateTime(2015, 11, 5, 0, 0, 0), "meeting", "", CustomColor.Crimson, EventType.Allday));
-            events.Add(new EventItem(new DateTime(2015, 11, 8), new DateTime(2015, 11, 15), "training", "", CustomColor.Yellow, EventType.Allday));
-            events.Add(new EventItem(new DateTime(2015, 11, 30), new DateTime(2015, 12, 15), "exams", "", CustomColor.LightPink, EventType.Allday));
+            events.Add(new EventItem(Guid.NewGuid(), new DateTime(2015, 11, 2), new DateTime(2015, 11, 4), "hair stylist", "", CustomColor.SkyBlue, EventType.Allday));
+            events.Add(new EventItem(Guid.NewGuid(), new DateTime(2015, 11, 5, 8, 0, 0), new DateTime(2015, 11, 5, 10, 0, 0), "Coffee", "", CustomColor.DarkSalmon, EventType.Hourly));
+            events.Add(new EventItem(Guid.NewGuid(), new DateTime(2015, 11, 5, 0, 0, 0), new DateTime(2015, 11, 5, 0, 0, 0), "meeting", "", CustomColor.Crimson, EventType.Allday));
+            events.Add(new EventItem(Guid.NewGuid(), new DateTime(2015, 11, 8), new DateTime(2015, 11, 15), "training", "", CustomColor.Yellow, EventType.Allday));
+            events.Add(new EventItem(Guid.NewGuid(), new DateTime(2015, 11, 30), new DateTime(2015, 12, 15), "exams", "", CustomColor.LightPink, EventType.Allday));
             EventCalendar cal = new EventCalendar();
             cal.AllEvents = events;
             return cal;
         }
-                        
-        public static List<EventItem> GetEventItemsForDate(DateTime dateTime, List<EventItem>allEvents)
+
+        public static List<EventItem> GetEventItemsForDate(DateTime dateTime, List<EventItem> allEvents)
         {
-            List<EventItem> events = new List<EventItem>();
-            List<EventItem> myEvents = new List<EventItem>();
             if (allEvents != null)
-                events = allEvents.OrderByDescending(x => x.EventStart).ToList();
-
-            if (events != null && events.Count > 0)
-
-                myEvents = events.Where(item => dateTime.DateHasEvent(item)).ToList();
-
-            return myEvents;
+            {
+                List<EventItem> events = allEvents.OrderByDescending(x => x.EventStart).ToList();
+                if (events != null && events.Count > 0)
+                    return events.Where(item => dateTime.DateHasEvent(item)).ToList();
+            }
+            return new List<EventItem>();
         }
        
         #region set background

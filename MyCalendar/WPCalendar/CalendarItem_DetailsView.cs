@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,10 +17,13 @@ namespace WPCalendar
 {
     public partial class CalendarItem
     {
-        public void GenerateDayEvents(List<EventItem> events)
-        {       
-            ConstructAllDayEvents(AllDayEvents, 450, Constants.ALL_DAY_EVENT_ITEM_HEIGHT);
-            GenerateHourEvents(HourEvents);
+        public void GenerateDayEvents()
+        {
+            List<EventItem> allDayEvents = EventsForDay.Where(x => x.EventType == EventType.Allday).ToList();
+            List<EventItem> hourEvents = EventsForDay.Where(x => x.EventType == EventType.Hourly).ToList();
+
+            ConstructAllDayEvents(allDayEvents, 450, Constants.ALL_DAY_EVENT_ITEM_HEIGHT);
+            GenerateHourEvents(hourEvents);
         }
 
         private void ConstructAllDayEvents(List<EventItem> eventsForDay, double width, double heigth)
@@ -152,7 +156,5 @@ namespace WPCalendar
           
         }
 
-
-      
     }
 }

@@ -14,17 +14,15 @@ using WPCalendar.Resources;
 using WPCalendar.Models;
 using WPCalendar.Helpers;
 using System.Windows.Data;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace WPCalendar
 {
-   public class PopupAddEditChild:Control
+   public class PopupAddEditChild:Control, INotifyPropertyChanged
    {
        #region Private
        Button cancelBtn, saveBtn;
-       CheckBox cbAllDayEvent;
-       DatePicker startDatePicker,endDatePicker;
-       TimePicker startTimePicker, endTimePicker;
-       Border selectedEventColor;
        Grid eventColoursGrid;
        TextBox tbName, tbLocation;
 
@@ -53,11 +51,17 @@ namespace WPCalendar
        public static readonly DependencyProperty EventLocationProperty =
            DependencyProperty.Register("EventLocation", typeof(string), typeof(PopupAddEditChild), new PropertyMetadata(""));
 
-
-       public Brush EventColor
+       private SolidColorBrush _eventColor;
+       public SolidColorBrush EventColor
        {
-           get;
-           internal set;
+           get
+           { return _eventColor; }
+           set
+           {
+               if (value != _eventColor)
+                   _eventColor = value;
+               NotifyPropertyChanged("EventColor");
+           }
        }
     
        public DateTime EventStart
@@ -71,49 +75,55 @@ namespace WPCalendar
            get;
            internal set;
        }
-    
 
+       private EventType _eventType;
+       public EventType EventType
+       {
+           get { return _eventType; }
+           set 
+           {
+               if (_eventType != value)
+                   _eventType = value;
+               NotifyPropertyChanged("EventType");
+           }
+       }
 
        #endregion
 
-       public PopupAddEditChild(CalendarItem calItem)
+       #region Event handler
+       public event PropertyChangedEventHandler PropertyChanged;
+       private void NotifyPropertyChanged(String propertyName)
+       {
+           PropertyChangedEventHandler handler = PropertyChanged;
+           if (null != handler)
+           {
+               handler(this, new PropertyChangedEventArgs(propertyName));
+           }
+       }
+       #endregion
+
+       public PopupAddEditChild(CalendarItem calItem, DateTime start, DateTime end)
        {
            DefaultStyleKey = typeof(PopupAddEditChild);
            EventTitle = ApplicationResources.NewEventTitle;
            EventLocation = ApplicationResources.NewEventLocation;
            EventColor = CustomColor.Aquamarine;
+           EventStart = start;
+           EventEnd = end;
+           EventType = Models.EventType.Allday;
 
            eventItem = new EventItem()
            {
-               EventTitle = ApplicationResources.NewEventTitle,
-               EventLocation = ApplicationResources.NewEventLocation,
-               EventColor = CustomColor.Aquamarine,
-               EventStart = DateTime.Today,
-               EventEnd = DateTime.Today,
-               EventType = EventType.Allday
+               EventId = Guid.Empty,
+               EventTitle = EventTitle,
+               EventLocation = EventLocation,
+               EventColor = (SolidColorBrush)EventColor,
+               EventStart = EventStart,
+               EventEnd = EventEnd,
+               EventType = EventType
            };
 
            _owningCalendarItem = calItem;
-       }
-
-       public PopupAddEditChild(DateTime start, DateTime end)
-       {
-           DefaultStyleKey = typeof(PopupAddEditChild);
-           EventTitle = ApplicationResources.NewEventTitle;
-           EventLocation = ApplicationResources.NewEventLocation;
-           EventStart = start;
-           EventEnd = end;
-           EventColor = CustomColor.Aquamarine;
-
-           eventItem = new EventItem()
-           {
-               EventTitle = ApplicationResources.NewEventTitle,
-               EventLocation = ApplicationResources.NewEventLocation,
-               EventColor = CustomColor.Aquamarine,
-               EventStart = start,
-               EventEnd = end,
-               EventType = EventType.Allday
-           };
        }
 
        public PopupAddEditChild(EventItem item, CalendarItem calItem)
@@ -124,6 +134,7 @@ namespace WPCalendar
            EventColor = item.EventColor;
            EventStart = item.EventStart;
            EventEnd = item.EventEnd;
+           EventType = item.EventType;
 
            eventItem = item;
            _owningCalendarItem = calItem;
@@ -135,18 +146,6 @@ namespace WPCalendar
 
             AssignUIElements();
 
-            InitializeValues();
-       }
-
-       private void InitializeValues()
-       {
-           selectedEventColor.Background = EventColor;
-           startDatePicker.Value = EventStart;
-           endDatePicker.Value = EventEnd;
-           startTimePicker.Value = EventStart;
-           endTimePicker.Value = EventEnd;
-
-           cancelBtn.Background = saveBtn.Background = EventColor;
        }
 
        private void AssignUIElements()
@@ -165,25 +164,15 @@ namespace WPCalendar
 
            tbName = GetTemplateChild("TbName") as TextBox;
            tbName.Loaded += TextBoxLoaded;
+           tbName.TextChanged += TextChanged;
            tbName.GotFocus += TextBoxGotFocus;
            tbName.LostFocus += TextBoxLostFocus;
 
            tbLocation = GetTemplateChild("TbLocation") as TextBox;
            tbLocation.Loaded += TextBoxLoaded;
+           tbLocation.TextChanged += TextChanged; 
            tbLocation.GotFocus += TextBoxGotFocus;
            tbLocation.LostFocus += TextBoxLostFocus;
-
-           cbAllDayEvent = GetTemplateChild("CBAllDayEvents") as CheckBox;
-           cbAllDayEvent.Checked += AllDayEventChecked;
-           cbAllDayEvent.Unchecked += AllDayEventUnChecked;
-
-           startDatePicker = GetTemplateChild("startDatePicker") as DatePicker;
-           startTimePicker = GetTemplateChild("startTimePicker") as TimePicker;
-
-           endDatePicker = GetTemplateChild("endDatePicker") as DatePicker;
-           endTimePicker = GetTemplateChild("endTimePicker") as TimePicker;
-
-           selectedEventColor = GetTemplateChild("SelectedEventColor") as Border;
 
            eventColoursGrid = GetTemplateChild("EventColoursGrid") as Grid;
            foreach (UIElement child in eventColoursGrid.Children)
@@ -194,6 +183,15 @@ namespace WPCalendar
        }
 
        #region Events
+
+       void TextChanged(object sender, TextChangedEventArgs e)
+       {
+           TextBox tb = (sender as TextBox);
+           if (tb == tbName)
+               EventTitle = tb.Text;
+           if (tb == tbLocation)
+               EventLocation = tb.Text;
+       }
 
        void TextBoxLoaded(object sender, RoutedEventArgs e)
        {
@@ -231,25 +229,9 @@ namespace WPCalendar
        void PickColor(object sender, System.Windows.Input.GestureEventArgs e)
        {
            Rectangle chosenColor = sender as Rectangle;
-           selectedEventColor.Background =
-            cancelBtn.Background = 
-            saveBtn.Background = chosenColor.Fill;
+           EventColor = (SolidColorBrush)chosenColor.Fill;
        }
 
-       void AllDayEventUnChecked(object sender, RoutedEventArgs e)
-       {
-           startDatePicker.SetValue(Grid.RowSpanProperty, 1);
-           endDatePicker.SetValue(Grid.RowSpanProperty, 1);
-           startTimePicker.Visibility = endTimePicker.Visibility = Visibility.Visible;
-       }
-      
-       void AllDayEventChecked(object sender, RoutedEventArgs e)
-       {
-           startDatePicker.SetValue(Grid.RowSpanProperty, 2);
-           endDatePicker.SetValue(Grid.RowSpanProperty, 2);
-           startTimePicker.Visibility = endTimePicker.Visibility = Visibility.Collapsed; 
-       }
-     
        void CancelButtonClick(object sender, RoutedEventArgs e)
        {
           _owningCalendarItem._owningCalendar.RegisterHourGridTap();
@@ -261,26 +243,7 @@ namespace WPCalendar
        {
            if (EventTitle != ApplicationResources.NewEventTitle)
            {
-               EventItem ev = new EventItem()
-               {
-                   EventTitle = EventTitle,
-                   EventLocation = EventLocation,
-                   EventStart = EventStart,
-                   EventEnd = EventEnd,
-                   EventColor = (SolidColorBrush)EventColor,
-               };
-
-               //do save
-               if (!eventItem.Equals(ev))
-               {
-                   eventItem = ev;
-                   /*
-                   _owningCalendarItem._owningCalendar.EventsCalendar.AllEvents.Remove(eventItem);
-                   _owningCalendarItem._owningCalendar.EventsCalendar.AllEvents.Add(ev);
-                   _owningCalendarItem._owningCalendar.Refresh();*/
-               }
-
-               (this.Parent as Popup).IsOpen = false;
+               AddUpdateEvent();
            }
            else
                tbName.BorderBrush = new SolidColorBrush(Colors.Red);
@@ -288,6 +251,33 @@ namespace WPCalendar
            _owningCalendarItem._owningCalendar.RegisterHourGridTap();
        }
 
+       void AddUpdateEvent()
+       {
+           if (eventItem.NeedsUpdate(EventTitle, EventLocation, EventStart, EventEnd, EventColor))
+           {
+               if (eventItem.EventId.Equals(Guid.Empty))
+               { 
+                   //add new
+                   eventItem.EventId = Guid.NewGuid();
+
+                   _owningCalendarItem.EventsForDay.Add(eventItem);
+                   _owningCalendarItem._owningCalendar.EventsCalendar.AllEvents.Add(eventItem);
+               }
+               else
+                   //update
+                   eventItem.UpdateValues(EventTitle, EventLocation, EventStart, EventEnd, EventColor);
+
+               //refresh calendarItem details
+               _owningCalendarItem.Refresh();
+               //refresh calendar details
+               _owningCalendarItem._owningCalendar.Refresh();
+           }
+
+           (this.Parent as Popup).IsOpen = false;
+       }
+
+
        #endregion
+ 
    }
 }

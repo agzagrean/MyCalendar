@@ -15,6 +15,7 @@ using WPCalendar.Helpers;
 using System.Windows.Navigation;
 using Windows.Phone.UI.Input;
 using System.Windows.Controls.Primitives;
+using System.Collections.ObjectModel;
 
 
 namespace WPCalendar
@@ -237,13 +238,11 @@ namespace WPCalendar
             var calendar = sender as Calendar;
             if (calendar != null)
             {
+
                 calendar.WireUpDataSource(e.OldValue, e.NewValue);
                 calendar.Refresh();
-
             }
-
-        }
-
+        } 
         #endregion
 
 

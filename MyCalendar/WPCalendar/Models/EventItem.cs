@@ -15,6 +15,10 @@ namespace WPCalendar.Models
     public class EventItem
     {
         [DataMember]
+        public Guid EventId { get; set; }
+
+
+        [DataMember]
         public DateTime EventStart{ get;set;}
 
         [DataMember]
@@ -34,8 +38,9 @@ namespace WPCalendar.Models
 
         public EventItem() { }
 
-        public EventItem(DateTime eventStart, DateTime eventEnd, string eventDescription, string eventLocation, SolidColorBrush eventColor, EventType eventType)
+        public EventItem(Guid id, DateTime eventStart, DateTime eventEnd, string eventDescription, string eventLocation, SolidColorBrush eventColor, EventType eventType)
         {
+            this.EventId = id;
             this.EventStart = eventStart;
             this.EventEnd = eventEnd;
             this.EventTitle = eventDescription;
@@ -44,5 +49,7 @@ namespace WPCalendar.Models
             this.EventType = eventType;
            
         }
+
+        
     }
 }

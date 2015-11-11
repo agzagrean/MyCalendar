@@ -14,11 +14,27 @@ namespace WPCalendar.Helpers
         {
             calendarItem._owningCalendar.UnregisterHourGridTap();
             Button button = sender as Button;
+
             EventItem item = button.CommandParameter as EventItem;
             if (item != null)
                 calendarItem._owningCalendar.popup.Child = new PopupAddEditChild(item, calendarItem);
             else
-                calendarItem._owningCalendar.popup.Child = new PopupAddEditChild(calendarItem);
+            {
+                DateTime date = calendarItem.ItemDate;
+                DateTime start = date;
+                DateTime end = date;
+
+                //new event
+                if (button != null)
+                {
+                    int hourStart = (int)button.GetValue(Grid.RowProperty);
+                    int hourEnd = hourStart + (int)button.GetValue(Grid.RowSpanProperty);
+
+                    start = new DateTime(date.Year, date.Month, date.Day, hourStart, 0, 0);
+                    end = new DateTime(date.Year, date.Month, date.Day, hourEnd, 0, 0);
+                }
+                calendarItem._owningCalendar.popup.Child = new PopupAddEditChild(calendarItem, start, end);
+            }
             calendarItem._owningCalendar.popup.IsOpen = true;
         }
     }
