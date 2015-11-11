@@ -3,9 +3,13 @@ WPCalendar - a Windows Phone  8 calendar -- work in progress
 WPCalendar is a  Windows Phone 8 calendar control based on the WPControl build by Sergey Barskiy (http://wpcontrols.codeplex.com/)
 
 Added capabilities:
- * Showing events
- * Display day details: events' details per day & hour (in progress)
- * Edit/Add events (not done)
+ * Displaying events in Calendar and Day Details
+ * Backround cell dinamically constructed based on events/day 
+ * Explicit refresh of detail view 
+ * Display day details: events' details per day & hour 
+ * Edit/Add/Update/Delete events
+ * Navigate throught days on swipe in DetailsView (not done)
+ 
 
 Previous capabilities (from http://wpcontrols.codeplex.com/):
 * Next/Previous month buttons
