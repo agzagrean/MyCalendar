@@ -104,9 +104,18 @@ namespace WPCalendar
 
                 int hours = item.EventEnd.Hour - item.EventStart.Hour;
 
-                detailItem.SetValue(Grid.RowProperty, item.EventStart.Hour);
+                TimeSpan timespan = item.EventEnd - item.EventStart;
+                double pixels = timespan.Hours * 60 + timespan.Minutes;
+                double marginTop = item.EventStart.Minute;
+                double marginBottom = item.EventEnd.Minute; 
+
+                detailItem.SetValue(Grid.RowProperty, item.EventStart.Hour +1);
                 detailItem.SetValue(Grid.RowSpanProperty, hours);
                 detailItem.SetValue(Grid.ColumnProperty, 1);
+                detailItem.Height = pixels;
+
+                detailItem.Margin = new Thickness(0, marginTop, 0, marginBottom);
+
                 _owningCalendar.hoursDetailsGrid.Children.Add(detailItem);
 
                 detailItem.Click += EditEvent;

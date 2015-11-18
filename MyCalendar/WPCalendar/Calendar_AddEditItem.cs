@@ -55,8 +55,6 @@ namespace WPCalendar
 
             hoursDetailsGrid.GenerateLines();
             hoursDetailsGrid.Tap += AddEventItem;
-
-            //DisableGesturesSupport();
         }
         #endregion
 

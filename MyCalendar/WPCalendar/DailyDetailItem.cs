@@ -47,17 +47,17 @@ namespace WPCalendar
         }
         #endregion
 
+        #region Constructor
+
         /// <summary>
         /// Create new instance of a calendar cell
         /// </summary>
-
-        #region Constructor
+        /// 
         [Obsolete("Internal use only")]
         public DailyDetailItem()
         {
             DefaultStyleKey = typeof(DailyDetailItem);
         }
-
 
         public DailyDetailItem(EventItem item)
         {
@@ -68,7 +68,6 @@ namespace WPCalendar
             this.Title = eventItem.EventTitle;
             this.FontSize = Constants.EVENT_FONT_SIZE;
         }
-
 
         public override void OnApplyTemplate()
         {

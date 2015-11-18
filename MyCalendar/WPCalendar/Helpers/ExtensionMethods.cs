@@ -101,9 +101,7 @@ namespace WPCalendar.Helpers
                 Rectangle horizontalLine = new Rectangle();
                 horizontalLine.Stroke = new SolidColorBrush(Colors.LightGray);
                 horizontalLine.Height = 0.5;
-                //GridLineThickness;
                 horizontalLine.StrokeThickness = 0.5;
-                //GridLineThickness;
                 horizontalLine.VerticalAlignment = VerticalAlignment.Bottom;
 
                 horizontalLine.SetValue(Grid.RowProperty, row);

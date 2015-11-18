@@ -144,7 +144,6 @@
     <Compile Include="Models\EventType.cs" />
     <Compile Include="PopupEditDeleteChild.cs" />
     <Compile Include="StringLocalization.cs" />
-    <Compile Include="Models\DateRange.cs" />
     <Compile Include="Models\EventCalendar.cs">
       <SubType>Code</SubType>
     </Compile>
