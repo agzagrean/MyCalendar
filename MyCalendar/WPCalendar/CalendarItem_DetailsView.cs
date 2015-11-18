@@ -117,7 +117,8 @@ namespace WPCalendar
                 detailItem.Margin = new Thickness(0, marginTop, 0, marginBottom);
 
                 _owningCalendar.hoursDetailsGrid.Children.Add(detailItem);
-
+                
+               
                 detailItem.Click += EditEvent;
             }
         }

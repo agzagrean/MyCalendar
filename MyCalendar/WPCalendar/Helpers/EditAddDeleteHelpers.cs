@@ -13,6 +13,7 @@ namespace WPCalendar.Helpers
         internal static void AddEditView(object sender, CalendarItem calendarItem)
         {
             calendarItem._owningCalendar.UnregisterHourGridTap();
+
             Button button = sender as Button;
 
             EventItem item = button.CommandParameter as EventItem;

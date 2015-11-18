@@ -25,20 +25,26 @@ namespace WPCalendar.Helpers
         }
 
 
-        public static bool NeedsUpdate(this EventItem eventItem, string EventTitle, string EventLocation, DateTime EventStart, DateTime EventEnd, Brush EventColor)
+        public static bool NeedsUpdate(this EventItem eventItem, string EventTitle, string EventLocation, DateTime EventStart, DateTime EventEnd, Brush EventColor, EventType EventType)
         {
-            if (eventItem.EventTitle == EventTitle && eventItem.EventLocation == EventLocation && eventItem.EventStart == EventStart && eventItem.EventEnd == EventEnd && eventItem.EventColor == EventColor)
+            if (eventItem.EventTitle == EventTitle &&
+                eventItem.EventLocation == EventLocation && 
+                eventItem.EventStart == EventStart &&
+                eventItem.EventEnd == EventEnd && 
+                eventItem.EventColor == EventColor &&
+                eventItem.EventType == EventType)
                 return false;
             return true;
         }
 
-        public static void UpdateValues(this EventItem eventItem, string EventTitle, string EventLocation, DateTime EventStart, DateTime EventEnd, Brush EventColor)
+        public static void UpdateValues(this EventItem eventItem, string EventTitle, string EventLocation, DateTime EventStart, DateTime EventEnd, Brush EventColor, EventType EventType)
         {
             eventItem.EventTitle = EventTitle;
             eventItem.EventLocation = EventLocation;
             eventItem.EventStart = EventStart;
             eventItem.EventEnd = EventEnd;
             eventItem.EventColor = (SolidColorBrush)EventColor;
+            eventItem.EventType = EventType;
         }
 
         public static bool Equals(this EventItem eventItem, EventItem eventItem2)

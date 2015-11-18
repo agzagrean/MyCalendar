@@ -214,12 +214,13 @@ namespace WPCalendar
                        DateTime newDate = new DateTime(date.Year, date.Month, date.Day, EventStart.Hour, EventStart.Minute, EventStart.Second);
                        EventStart = newDate;
                    }
+                   else
 
-                   if (datePicker == endDatePicker)
-                   {
-                       DateTime newDate = new DateTime(date.Year, date.Month, date.Day, EventEnd.Hour, EventEnd.Minute, EventEnd.Second);
-                       EventEnd = newDate;
-                   }
+                       if (datePicker == endDatePicker)
+                       {
+                           DateTime newDate = new DateTime(date.Year, date.Month, date.Day, EventEnd.Hour, EventEnd.Minute, EventEnd.Second);
+                           EventEnd = newDate;
+                       }
 
                    if (EventStart > EventEnd)
                        EventEnd = EventStart;
@@ -239,12 +240,12 @@ namespace WPCalendar
                        DateTime newDate = new DateTime(EventStart.Year, EventStart.Month, EventStart.Day, date.Hour, date.Minute, date.Second);
                        EventStart = newDate;
                    }
-
-                   if (timePicker == endTimePicker)
-                   {
-                       DateTime newDate = new DateTime(EventEnd.Year, EventEnd.Month, EventEnd.Day, date.Hour, date.Minute, date.Second);
-                       EventStart = newDate;
-                   }
+                   else
+                       if (timePicker == endTimePicker)
+                       {
+                           DateTime newDate = new DateTime(EventEnd.Year, EventEnd.Month, EventEnd.Day, date.Hour, date.Minute, date.Second);
+                           EventStart = newDate;
+                       }
                }
            }
            (this.Parent as Popup).IsOpen = true;
@@ -327,7 +328,7 @@ namespace WPCalendar
 
        void AddUpdateEvent()
        {
-           if (eventItem.NeedsUpdate(EventTitle, EventLocation, EventStart, EventEnd, EventColor))
+           if (eventItem.NeedsUpdate(EventTitle, EventLocation, EventStart, EventEnd, EventColor, EventType))
            {
                if (eventItem.EventId.Equals(Guid.Empty))
                { 
@@ -339,7 +340,7 @@ namespace WPCalendar
                }
                else
                    //update
-                   eventItem.UpdateValues(EventTitle, EventLocation, EventStart, EventEnd, EventColor);
+                   eventItem.UpdateValues(EventTitle, EventLocation, EventStart, EventEnd, EventColor, EventType);
 
                //refresh calendarItem details
                _owningCalendarItem.Refresh();

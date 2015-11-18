@@ -115,6 +115,16 @@
         </Setter>
     </Style>
 
+    <Style TargetType="CheckBox" x:Key="checkBox">
+        <Setter Property="Foreground" Value="DarkGray"/>
+        <Setter Property="Height" Value="400"/>
+        <Setter Property="Width" Value="Auto"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="BorderBrush" Value="DarkGray"/>
+        <Setter Property="Background" Value="White"/>
+    </Style>
+
     <Style TargetType="local:Calendar">
         <Setter Property="Background" Value="WhiteSmoke"/>
         <Setter Property="Foreground" Value="{StaticResource PhoneForegroundBrush}"/>
@@ -554,8 +564,8 @@
                                 Content="ALL DAY" 
                                 IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, 
                                           Path=EventType, Converter={StaticResource EventTypeToCheckedConverter},Mode=TwoWay}"                               
-                                Foreground="DarkGray"  
-                                BorderBrush="DarkGray"/>
+                              Foreground="DarkGray"
+                              BorderBrush="DarkGray"/>
                             <Grid x:Name="EventColoursGrid"
                                 Grid.Row="8" Grid.RowSpan="2" Grid.ColumnSpan="2">
                                 <Grid.ColumnDefinitions>
