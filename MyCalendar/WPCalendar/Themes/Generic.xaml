@@ -642,7 +642,6 @@
         </Setter>
     </Style>
 
-
     <Style TargetType="local:PopupEditDeleteChild">
         <Setter Property="Template">
             <Setter.Value>
