@@ -18,14 +18,9 @@ namespace WPCalendar
 
         public readonly EventItem eventItem;
 
-
         #endregion
 
-
         #region Properties
-
-       
-
 
         public string Title
         {
@@ -52,10 +47,11 @@ namespace WPCalendar
         }
         #endregion
 
-       /// <summary>
+        /// <summary>
         /// Create new instance of a calendar cell
         /// </summary>
-   
+
+        #region Constructor
         [Obsolete("Internal use only")]
         public DailyDetailItem()
         {
@@ -93,5 +89,7 @@ namespace WPCalendar
         {
             Foreground = new SolidColorBrush(Colors.White);
         }
+
+        #endregion
     }
 }
