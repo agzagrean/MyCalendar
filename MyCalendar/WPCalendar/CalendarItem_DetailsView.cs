@@ -22,7 +22,7 @@ namespace WPCalendar
             List<EventItem> allDayEvents = EventsForDay.Where(x => x.EventType == EventType.Allday).ToList();
             List<EventItem> hourEvents = EventsForDay.Where(x => x.EventType == EventType.Hourly).ToList();
 
-            ConstructAllDayEvents(allDayEvents, 450, Constants.ALL_DAY_EVENT_ITEM_HEIGHT);
+            ConstructAllDayEvents(allDayEvents, Constants.ALL_DAY_EVENT_ITEM_WIDTH, Constants.ALL_DAY_EVENT_ITEM_HEIGHT);
             GenerateHourEvents(hourEvents);
         }
 
@@ -36,49 +36,26 @@ namespace WPCalendar
             if (eventsForDay.Count <= maxlines)
                 maxlines = eventsForDay.Count;
 
-            Button btnDayEvent;
             for (index = 0; index < maxlines; index++)
             {
-                EventItem item = eventsForDay[index];
+                EventItem eventItem = eventsForDay[index];
 
-                btnDayEvent = new Button()
-                    {
-                        Width = width,
-                        Height = heigth,
-                        Margin = new Thickness(0, -10, 0, 0),
-                        FontSize = 16,
-                        Background = item.EventColor,
-                        Content = item.EventTitle,
-                        Foreground = CustomColor.White,
-                        BorderThickness = new Thickness(0),
-                        VerticalAlignment = System.Windows.VerticalAlignment.Top,
-                        HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
-                        HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left,
+                DailyDetailItem item = new DailyDetailItem( eventItem);
 
-                    };
-
-                btnDayEvent.CommandParameter = item;
-                btnDayEvent.Click += EditEvent;
-                _owningCalendar._spAllDayEvents.Children.Add(btnDayEvent);
+                item.Click += EditEvent;
+         
+                _owningCalendar.spAllDayEvents.Children.Add(item);
             }
 
-            _owningCalendar._spAllDayEvents.Children.Add(new Rectangle()
-            {
-                Height = 1.3,
-                Stroke = new SolidColorBrush(Colors.LightGray),
-                StrokeThickness = 1.3,
-                HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch
-            });
-
-            ResizeUIControls(maxlines * 60);
+            ResizeUIControls(maxlines * (Constants.ALL_DAY_EVENT_ITEM_HEIGHT + 5));
         }
 
         private void ResizeUIControls(double height)
         {
             if (height < Constants.MAX_ALL_DAY_EVENTS_HEIGHT)
-                _owningCalendar._spAllDayEvents.Height = height;
+                _owningCalendar.spAllDayEvents.Height = height;
             else
-                _owningCalendar._spAllDayEvents.Height = Constants.MAX_ALL_DAY_EVENTS_HEIGHT;
+                _owningCalendar.spAllDayEvents.Height = Constants.MAX_ALL_DAY_EVENTS_HEIGHT;
 
             ResizeScrollviewer();
         }
@@ -93,10 +70,10 @@ namespace WPCalendar
                 {
                     double newScrollViewerHeight =
                         maxHeight -
-                        _owningCalendar._spAllDayEvents.Height -
+                        _owningCalendar.spAllDayEvents.Height -
                         _owningCalendar._dayDetailsGrid.RowDefinitions[0].Height.Value;
                     if (newScrollViewerHeight > 0)
-                        _owningCalendar._scrollViewerHours.Height = newScrollViewerHeight;
+                        _owningCalendar.scrollViewerHours.Height = newScrollViewerHeight;
                 }
             }
         }
@@ -115,31 +92,24 @@ namespace WPCalendar
                 };
                 tb.SetValue(Grid.RowProperty, i + 1);
                 tb.SetValue(Grid.ColumnProperty, 0);
-                _owningCalendar._hoursDetails.Children.Add(tb);
+                _owningCalendar.hoursDetailsGrid.Children.Add(tb);
             }
         }
 
         private void GenerateHourEvents(List<EventItem> hourEvents)
         {
-            Button button;
             foreach (EventItem item in hourEvents)
             {
-                button = new Button()
-                {
-                    FontSize = Constants.EVENT_FONT_SIZE,
-                    Content = item.EventTitle,
-                    Background = item.EventColor,
-                    Foreground = new SolidColorBrush(Colors.White),
-                };
+                DailyDetailItem detailItem = new DailyDetailItem(item);
 
                 int hours = item.EventEnd.Hour - item.EventStart.Hour;
 
-                button.SetValue(Grid.RowProperty, item.EventStart.Hour);
-                button.SetValue(Grid.RowSpanProperty, hours);
-                button.SetValue(Grid.ColumnProperty, 1);
-                _owningCalendar._hoursDetails.Children.Add(button);
-                button.CommandParameter = item;
-                button.Click += EditEvent;
+                detailItem.SetValue(Grid.RowProperty, item.EventStart.Hour);
+                detailItem.SetValue(Grid.RowSpanProperty, hours);
+                detailItem.SetValue(Grid.ColumnProperty, 1);
+                _owningCalendar.hoursDetailsGrid.Children.Add(detailItem);
+
+                detailItem.Click += EditEvent;
             }
         }
 

@@ -25,6 +25,8 @@ namespace WPCalendar
        Button cancelBtn, saveBtn;
        Grid eventColoursGrid;
        TextBox tbName, tbLocation;
+       DatePicker startDatePicker, endDatePicker;
+       TimePicker startTimePicker, endTimePicker;
 
        protected CalendarItem _owningCalendarItem;
 
@@ -67,13 +69,13 @@ namespace WPCalendar
        public DateTime EventStart
        {
            get;
-           internal set;
+           private set;
        }
       
        public DateTime EventEnd
        {
            get;
-           internal set;
+           private set;
        }
 
        private EventType _eventType;
@@ -145,7 +147,6 @@ namespace WPCalendar
            base.OnApplyTemplate();
 
             AssignUIElements();
-
        }
 
        private void AssignUIElements()
@@ -180,6 +181,79 @@ namespace WPCalendar
                if (child.GetType() == typeof(Rectangle))
                    child.Tap += PickColor;
            }
+
+           startDatePicker = GetTemplateChild("startDatePicker") as DatePicker;
+           startDatePicker.Tap += DateTimePickerTap;
+           startDatePicker.ValueChanged += DatePickerValueChanged;
+
+           endDatePicker = GetTemplateChild("endDatePicker") as DatePicker;
+           endDatePicker.Tap += DateTimePickerTap;
+           endDatePicker.ValueChanged += DatePickerValueChanged;
+
+           startTimePicker = GetTemplateChild("startTimePicker") as TimePicker;
+           startTimePicker.Tap += DateTimePickerTap;
+           startTimePicker.ValueChanged += DatePickerValueChanged;
+
+           endTimePicker = GetTemplateChild("endTimePicker") as TimePicker;
+           endTimePicker.Tap += DateTimePickerTap;
+           endTimePicker.ValueChanged += DatePickerValueChanged;
+       }
+
+       void DatePickerValueChanged(object sender, DateTimeValueChangedEventArgs e)
+       {
+           if (sender.GetType().Equals(typeof(DatePicker)))
+           {
+               DatePicker datePicker = sender as DatePicker;
+
+               if (e.OldDateTime != e.NewDateTime && e.NewDateTime.HasValue)
+               {
+                   DateTime date = e.NewDateTime.Value;
+
+                   if (datePicker == startDatePicker)
+                   {
+                       DateTime newDate = new DateTime(date.Year, date.Month, date.Day, EventStart.Hour, EventStart.Minute, EventStart.Second);
+                       EventStart = newDate;
+                   }
+
+                   if (datePicker == endDatePicker)
+                   {
+                       DateTime newDate = new DateTime(date.Year, date.Month, date.Day, EventEnd.Hour, EventEnd.Minute, EventEnd.Second);
+                       EventEnd = newDate;
+                   }
+
+                   if (EventStart > EventEnd)
+                       EventEnd = EventStart;
+               }
+           }
+
+           if (sender.GetType().Equals(typeof(TimePicker)))
+           {
+               TimePicker timePicker = sender as TimePicker;
+
+               if (e.OldDateTime != e.NewDateTime && e.NewDateTime.HasValue)
+               {
+                   DateTime date = e.NewDateTime.Value;
+
+                   if (timePicker == startTimePicker)
+                   {
+                       DateTime newDate = new DateTime(EventStart.Year, EventStart.Month, EventStart.Day, date.Hour, date.Minute, date.Second);
+                       EventStart = newDate;
+                   }
+
+                   if (timePicker == endTimePicker)
+                   {
+                       DateTime newDate = new DateTime(EventEnd.Year, EventEnd.Month, EventEnd.Day, date.Hour, date.Minute, date.Second);
+                       EventStart = newDate;
+                   }
+               }
+           }
+           (this.Parent as Popup).IsOpen = true;
+       }
+
+       void DateTimePickerTap(object sender, System.Windows.Input.GestureEventArgs e)
+       {
+           (this.Parent as Popup).IsOpen = false;
+       
        }
 
        #region Events

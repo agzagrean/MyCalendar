@@ -125,7 +125,6 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -134,8 +133,19 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock x:Name="YearMonthLabelTextBlock"
                                    Text="{TemplateBinding YearMonthLabel}" FontSize="{StaticResource PhoneFontSizeMediumLarge}"
-                                   Foreground="#BF5279"
+                                   Foreground="{StaticResource DarkGray}"
                                    Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                        <StackPanel x:Name="DetailsHeaderStackPanel" Visibility="Collapsed" Margin="9,-7,0,0" Grid.Column="1" Grid.ColumnSpan="2">
+                            <TextBlock Text="{TemplateBinding DayOfTheWeek}"
+                                       Foreground="{StaticResource DarkGray}" />
+                            <TextBlock  
+                                Text="{TemplateBinding DayTitle}" 
+                                FontSize="{StaticResource PhoneFontSizeMediumLarge}"
+                                Foreground="{StaticResource DarkGray}"/>
+                           
+                        </StackPanel>
+
                         <Button
                             Width="72" Height="72"
                             Grid.Column="0" 
@@ -167,7 +177,7 @@
 
                         <Grid 
                             x:Name="ItemsGrid"
-                            Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
+                            Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
                             Margin="0,10,0,0"
                             ShowGridLines="False">
                             <Grid.ColumnDefinitions>
@@ -199,9 +209,8 @@
                         </Grid>
 
                         <Grid x:Name="DayDetailsGrid" 
-                              Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="3"  Visibility="Collapsed" >
+                              Grid.Row="1" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="3"  Visibility="Collapsed" >
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="80"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -210,35 +219,16 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Button 
-                                x:Name="BackToMonthViewButton" Grid.Row="0" Grid.Column="0" 
-                               Width="72" Height="72"
-                                Style="{StaticResource RoundButtonStyle}">
-                                <Button.Background>
-                                    <ImageBrush Stretch="UniformToFill" 
-                                            ImageSource="/Images/Light/back.png"/>
-                                </Button.Background>
-                            </Button>
 
-                            <StackPanel  Grid.Row="0" Margin="9,-7,0,0" Grid.Column="1">
-                                <TextBlock Text="{TemplateBinding DayOfTheWeek}"   
-                                           Foreground="{StaticResource PhoneForegroundBrush2}" />
-                                <TextBlock 
-                                    Text="{TemplateBinding DayTitle}" 
-                                    Style="{StaticResource PhoneTextTitle2Style}" 
-                                    Foreground="{StaticResource PhoneForegroundBrush2}"/>
-
-                            </StackPanel>
-                            <Rectangle Grid.Row="0" VerticalAlignment="Bottom" Grid.ColumnSpan="2"
+                            <Rectangle VerticalAlignment="Top" Grid.Column="0" Grid.ColumnSpan="3"
                                             HorizontalAlignment="Stretch" 
-                                            Margin="-9, 10, 0, 10"
                                             Stroke="LightGray" 
                                             Height="0.7"
                                             StrokeThickness="0.7" />
 
                             <StackPanel x:Name="spAllDayEvents" 
                                     Background="Transparent"
-                                    Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                                    Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
                             </StackPanel>
 
                             <ScrollViewer x:Name="ScrollViewsHours" 
@@ -387,6 +377,45 @@
         </Setter>
     </Style>
 
+    <Style TargetType="local:DailyDetailItem">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate  TargetType="local:DailyDetailItem">
+                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <Border 
+                            BorderThickness="0.5,0.5,0.5,1"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            BorderBrush="LightGray">
+                            <Grid Height="110" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <Rectangle Grid.RowSpan="2" x:Name="BackgroundRectangle" Fill="{TemplateBinding Background}"  />
+                                
+                                <TextBlock Grid.Row="0"
+                                    x:Name="TBTitleEvent"
+                                    Text="{Binding Path=Title, RelativeSource={RelativeSource TemplatedParent}}" 
+                                    Foreground="{TemplateBinding Foreground}" 
+                                    FontFamily="Segoe UI Semilight"
+                                    Margin="10"
+                                    TextAlignment="Left"
+                                    HorizontalAlignment="Left" 
+                                    VerticalAlignment="Top" 
+                                    FontSize="{TemplateBinding FontSize}"/>
+                                <Rectangle Grid.Row="1" Height="1.3" StrokeThickness="1.3" Stroke="{StaticResource LightGray}" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"/>
+
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style TargetType="local:PopupAddEditChild">
         <Setter Property="Template">
             <Setter.Value>
@@ -481,7 +510,8 @@
                                     x:Name="startDatePicker"
                                     Foreground="Black" 
                                     BorderBrush="DarkGray"
-                                     Value="{Binding RelativeSource={RelativeSource TemplatedParent}, 
+                                    Background="White"
+                                    Value="{Binding RelativeSource={RelativeSource TemplatedParent}, 
                                           Path=EventStart, Mode=TwoWay}"
                                     BorderThickness="0,0,0,2"/>
                                 <toolkit:TimePicker  

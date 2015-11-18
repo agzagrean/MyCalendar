@@ -139,6 +139,7 @@
     <Compile Include="Helpers\ExtensionMethods.cs" />
     <Compile Include="Helpers\HelperMethods.cs" />
     <Compile Include="Converters\IDateToBrushConverter.cs" />
+    <Compile Include="DailyDetailItem.cs" />
     <Compile Include="ISupportCalendarItem.cs" />
     <Compile Include="Models\EventType.cs" />
     <Compile Include="PopupEditDeleteChild.cs" />

@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using WPCalendar.Helpers;
+using WPCalendar.Models;
 
 namespace WPCalendar
 {
@@ -17,48 +18,45 @@ namespace WPCalendar
 
         public void SwitchToMonthView()
         {
-            _itemsGrid.Visibility = previousButton.Visibility = nextButton.Visibility = tbYearMonthLabel.Visibility = Visibility.Visible;
-            _dayDetailsGrid.Visibility = backToMonthViewButton.Visibility = Visibility.Collapsed;
+            _itemsGrid.Visibility = nextButton.Visibility = tbYearMonthLabel.Visibility = Visibility.Visible;
+            _dayDetailsGrid.Visibility = spDetailsHeader.Visibility = Visibility.Collapsed;
 
             ClearDetailsGrid();
 
             UnregisterHourGridTap();
 
-            _itemsGrid.GenerateLines();
-
             // reenable gestures
-            EnableGesturesSupport();
+           // EnableGesturesSupport();
         }
 
         public void ClearDetailsGrid()
         {
-            _spAllDayEvents.Height = 0;
-            _spAllDayEvents.Children.Clear();
+            spAllDayEvents.Height = 0;
+            spAllDayEvents.Children.Clear();
 
-            _hoursDetails.Children.Clear();
-            _scrollViewerHours.ScrollToVerticalOffset(0);
+            hoursDetailsGrid.Children.Clear();
+            scrollViewerHours.ScrollToVerticalOffset(0);
         }
 
 
         public void RegisterHourGridTap()
         {
-            _hoursDetails.Tap += AddEventItem;
+            hoursDetailsGrid.Tap += AddEventItem;
         }
         public void UnregisterHourGridTap()
         {
-            _hoursDetails.Tap -= AddEventItem;
+            hoursDetailsGrid.Tap -= AddEventItem;
         }
 
         public void SwitchToDetailsView()
         {
-            _itemsGrid.Visibility = previousButton.Visibility = nextButton.Visibility = tbYearMonthLabel.Visibility = Visibility.Collapsed;
-            _dayDetailsGrid.Visibility = backToMonthViewButton.Visibility = Visibility.Visible;
+            _itemsGrid.Visibility  = nextButton.Visibility = tbYearMonthLabel.Visibility = Visibility.Collapsed;
+            _dayDetailsGrid.Visibility = spDetailsHeader.Visibility = Visibility.Visible;
 
-            _hoursDetails.GenerateLines();
-            _hoursDetails.Tap += AddEventItem;
+            hoursDetailsGrid.GenerateLines();
+            hoursDetailsGrid.Tap += AddEventItem;
 
-            //you don't want flicking years when scrolling into day details
-            DisableGesturesSupport();
+            //DisableGesturesSupport();
         }
         #endregion
 
@@ -71,33 +69,26 @@ namespace WPCalendar
             string eventTitle = " + New title event";
             double width = (grid.Parent as ScrollViewer).Width - 50;
 
-            Button button = new Button()
-            {
-                Width = width,
-                FontSize = Constants.EVENT_FONT_SIZE,
-                Content = eventTitle,
-                Foreground = CustomColor.White,
-                Background = CustomColor.CornflowerBlue,
-                HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left
-            };
-            button.Click += EditEvent;
-
-            int hour = (int)Math.Ceiling((point.Y) / Constants.GRID_HOURS_CELL_HEIGHT);
-
             DateTime dateTime = _lastItem.ItemDate;
-         
-            _lastItem.EventsForDay.Add(new Models.EventItem()
-            {
-                EventStart = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, hour, 0, 0),
-                EventEnd = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, hour + 1, 0, 0),
-                EventTitle = eventTitle,
-                EventLocation = string.Empty
-            });
+            int hour = (int)Math.Ceiling((point.Y) / Constants.GRID_HOURS_CELL_HEIGHT);
+            EventItem eventItem = new EventItem()
+               {
+                   EventColor = CustomColor.CornflowerBlue,
+                   EventStart = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, hour, 0, 0),
+                   EventEnd = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, hour + 1, 0, 0),
+                   EventTitle = eventTitle,
+                   EventLocation = string.Empty
+               };
 
-            button.SetValue(Grid.RowProperty, hour);
-            button.SetValue(Grid.RowSpanProperty, 1);
-            button.SetValue(Grid.ColumnProperty, 1);
-            grid.Children.Add(button);
+            DailyDetailItem eventDetails = new DailyDetailItem(eventItem);
+            eventDetails.Click += EditEvent;
+
+            _lastItem.EventsForDay.Add(eventItem);
+
+            eventDetails.SetValue(Grid.RowProperty, hour);
+            eventDetails.SetValue(Grid.RowSpanProperty, 1);
+            eventDetails.SetValue(Grid.ColumnProperty, 1);
+            grid.Children.Add(eventDetails);
         }
 
         private void EditEvent(object sender, RoutedEventArgs e)

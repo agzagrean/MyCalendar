@@ -13,4 +13,5 @@
     <SolidColorBrush x:Name="LightGray" Color="LightGray"/>
     <SolidColorBrush x:Name="Thistle" Color="Thistle"/>
     <SolidColorBrush x:Name="White" Color="White"/>
+    <SolidColorBrush x:Name="DarkGray" Color="DarkGray"/>
 </ResourceDictionary>

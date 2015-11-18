@@ -74,35 +74,56 @@ namespace WPCalendar
                 var gesture = TouchPanel.ReadGesture();
                 if (gesture.GestureType == GestureType.Flick)
                 {
-                    double horizontal = gesture.Delta.X / Factor;
-                    double vertical = gesture.Delta.Y / Factor;
-                    if (Math.Abs(horizontal) > Math.Abs(vertical))
+                    if (IsInMonthView)
                     {
-                        if ((int)horizontal > 0)
-                        {
-                            DecrementMonth();
-                        }
-                        else
-                        {
-                            IncrementMonth();
-                        }
-                    }
-                    /*
-                else
-                {
-                    if ((int)vertical > 0)
-                    {
-                        DecrementYear();
+                        gesture = MonthViewFlick(gesture);
                     }
                     else
                     {
-                        IncrementYear();
-
+                        gesture = DetailViewFlick(gesture);
                     }
                 }
-                     * */
+            }
+        }
+
+        private GestureSample DetailViewFlick(GestureSample gesture)
+        {
+            double horizontal = gesture.Delta.X / Factor;
+            double vertical = gesture.Delta.Y / Factor;
+            if (Math.Abs(horizontal) > Math.Abs(vertical))
+            {
+                if ((int)horizontal > 0)
+                {
+                    DecrementDay();
+                }
+                else
+                {
+                    IncrementDay();
                 }
             }
+
+            return gesture;
+
+        }
+
+        private GestureSample MonthViewFlick(GestureSample gesture)
+        {
+            double horizontal = gesture.Delta.X / Factor;
+            double vertical = gesture.Delta.Y / Factor;
+            if (Math.Abs(horizontal) > Math.Abs(vertical))
+            {
+                if ((int)horizontal > 0)
+                {
+                    DecrementMonth();
+
+                }
+                else
+                {
+                    IncrementMonth();
+                   
+                }
+            }
+            return gesture;
         }
 
 
@@ -111,17 +132,18 @@ namespace WPCalendar
 
         #region Members
         private Grid _itemsGrid;
-        public Grid _hoursDetails;
+        public Grid hoursDetailsGrid;
         public Popup popup;
 
         public Grid _dayDetailsGrid;
-        public StackPanel _spAllDayEvents;
-        public ScrollViewer _scrollViewerHours;
-        private Button previousButton, nextButton, backToMonthViewButton;
+        public StackPanel spAllDayEvents, spDetailsHeader;
+        public ScrollViewer scrollViewerHours;
+        private Button previousButton, nextButton;
         private TextBlock tbYearMonthLabel;
 
         CalendarItem _lastItem;
         private bool _addedItems;
+        private int _day = DateTime.Today.Day;
         private int _month = DateTime.Today.Month;
         private int _year = DateTime.Today.Year;
         internal List<DateTime> DatesAssigned;
@@ -245,7 +267,6 @@ namespace WPCalendar
         } 
         #endregion
 
-
         internal bool IsInMonthView { get { return _itemsGrid.Visibility == Visibility.Visible; } }
 
         internal object PrivateDataContextProperty
@@ -355,8 +376,6 @@ namespace WPCalendar
         /// </summary>
         public static readonly DependencyProperty DatePropertyNameForDatesSourceProperty =
             DependencyProperty.Register("DatePropertyNameForDatesSource", typeof(string), typeof(Calendar), new PropertyMetadata(string.Empty, OnDatesSourceChanged));
-
-
 
         /// <summary>
         /// Style for the calendar item
@@ -473,7 +492,6 @@ namespace WPCalendar
             }
         }
 
-
         /// <summary>
         /// This converter is used to dynamically color the background or day number of a calendar cell
         /// based on date and the fact that a date is selected and type of conversion
@@ -575,13 +593,9 @@ namespace WPCalendar
         {
             var target = (Calendar)sender;
             if (target.EnableGestures)
-            {
-                //  target.EnableGesturesSupport();
-            }
+                target.EnableGesturesSupport();
             else
-            {
-                //  target.DisableGesturesSupport();
-            }
+                target.DisableGesturesSupport();
         }
 
         /// <summary>
@@ -886,16 +900,14 @@ namespace WPCalendar
             if (nextButton != null) nextButton.Click += NextButtonClick;
 
             tbYearMonthLabel = GetTemplateChild("YearMonthLabelTextBlock") as TextBlock;
+            spDetailsHeader = GetTemplateChild("DetailsHeaderStackPanel") as StackPanel;
 
             _itemsGrid = GetTemplateChild("ItemsGrid") as Grid;
             _dayDetailsGrid = GetTemplateChild("DayDetailsGrid") as Grid;
 
-            backToMonthViewButton = GetTemplateChild("BackToMonthViewButton") as Button;
-            if (backToMonthViewButton != null) backToMonthViewButton.Click += BackToMonthViewButton;
-
-            _spAllDayEvents = GetTemplateChild("spAllDayEvents") as StackPanel;
-            _hoursDetails = GetTemplateChild("gridHours") as Grid;
-            _scrollViewerHours = GetTemplateChild("ScrollViewsHours") as ScrollViewer;
+            spAllDayEvents = GetTemplateChild("spAllDayEvents") as StackPanel;
+            hoursDetailsGrid = GetTemplateChild("gridHours") as Grid;
+            scrollViewerHours = GetTemplateChild("ScrollViewsHours") as ScrollViewer;
 
             InitializeEditPopup();
 
@@ -917,90 +929,23 @@ namespace WPCalendar
             popup.VerticalOffset = 0;
             popup.HorizontalOffset = 0;
         }
+      
         #endregion
 
         #region Event handling
 
-        void BackToMonthViewButton(object sender, RoutedEventArgs e)
-        {
-            SwitchToMonthView();
-        }
-
         void NextButtonClick(object sender, RoutedEventArgs e)
         {
             IncrementMonth();
-        }
-
-        private void IncrementMonth()
-        {
-            if (CanMoveToMonthYear(_year, _month + 1))
-            {
-                _month += 1;
-                if (_month == 13)
-                {
-                    _month = 1;
-                    _year += 1;
-                }
-                SetYearMonthLabel();
-            }
+            
         }
 
         void PreviousButtonClick(object sender, RoutedEventArgs e)
         {
-            DecrementMonth();
-        }
-
-        private void DecrementMonth()
-        {
-            if (CanMoveToMonthYear(_year, _month - 1))
-            {
-                _month -= 1;
-                if (_month == 0)
-                {
-                    _month = 12;
-                    _year -= 1;
-                }
-                SetYearMonthLabel();
-            }
-        }
-
-        private void IncrementYear()
-        {
-            if (CanMoveToMonthYear(_year + 1, _month))
-            {
-                _year += 1;
-                SetYearMonthLabel();
-            }
-        }
-
-        private void DecrementYear()
-        {
-            if (CanMoveToMonthYear(_year - 1, _month))
-            {
-                _year -= 1;
-                SetYearMonthLabel();
-            }
-        }
-
-        private bool CanMoveToMonthYear(int year, int month)
-        {
-            var returnValue = false;
-            if (month == 0)
-            {
-                year = year - 1;
-                month = 12;
-            }
-            else if (month == 13)
-            {
-                month = 1;
-                year = year + 1;
-            }
-            var testDate = new DateTime(year, month, 1);
-            if (testDate >= MinimumDate && testDate <= MaximumDate)
-            {
-                returnValue = true;
-            }
-            return returnValue;
+            if (IsInMonthView)
+                DecrementMonth();
+            else
+                SwitchToMonthView();
         }
 
         private void ItemClick(object sender, RoutedEventArgs e)
@@ -1023,31 +968,199 @@ namespace WPCalendar
                 }
             }
         }
-/*
-        private void ItemHold(object sender, GestureEventArgs e)
-        {
-            if (IsInMonthView)
-            {
-                if (_lastItem != null)
-                {
-                    _lastItem.IsSelected = false;
-                }
-                _lastItem = (sender as CalendarItem);
-                if (_lastItem != null)
-                {
-                    if (ShowSelectedDate)
-                        _lastItem.IsSelected = true;
-                    SelectedDate = _lastItem.ItemDate;
-                    OnDateClicked(_lastItem.ItemDate);
-                    _lastItem.DisplayDetailView();
-                }
-            }
-        }
-        */
+
         #endregion
 
+        #region Private Methods
 
-        #region Methods
+        private void IncrementDay()
+        {
+            int _day = SelectedDate.Day;
+            string lastTag = (string)_lastItem.Tag;
+            if (CanMoveToDayMonthYear(_year, _month, _day +1))
+            {
+                _day++;
+
+                int year = _year;
+                int month = _month;
+                int day =_day;
+                DateTime dateTime = InitDate(year, month, day);
+
+                if (dateTime.Month != _month)
+                {
+                    _month = dateTime.Month;
+                    _year = dateTime.Year;
+                    _day = dateTime.Day;
+                    SetYearMonthLabel();
+                }
+                DateTime date = new DateTime(_year, _month, _day);
+                UpdateSelectedDate(date);
+            }
+        }
+
+        private void DecrementDay()
+        {
+            int _day = SelectedDate.Day;
+            string lastTag = (string)_lastItem.Tag;
+            if (CanMoveToDayMonthYear(_year, _month, _day - 1))
+            {
+                _day--;
+
+                int year = _year;
+                int month = _month;
+                int day = _day;
+                DateTime dateTime = InitDate(year, month, day);
+
+                if (dateTime.Month != _month)
+                {
+                    _month = dateTime.Month;
+                    _year = dateTime.Year;
+                    _day = dateTime.Day;
+                    SetYearMonthLabel();
+                }
+
+                DateTime date = new DateTime(_year, _month, _day);
+                UpdateSelectedDate(date);
+            }
+        }
+
+        private void IncrementMonth()
+        {
+            if (CanMoveToMonthYear(_year, _month + 1))
+            {
+                _month += 1;
+                if (_month == 13)
+                {
+                    _month = 1;
+                    _year += 1;
+                }
+                SetYearMonthLabel();
+            }
+        }
+
+        private void DecrementMonth()
+        {
+            if (CanMoveToMonthYear(_year, _month - 1))
+            {
+                _month -= 1;
+                if (_month == 0)
+                {
+                    _month = 12;
+                    _year -= 1;
+                }
+                SetYearMonthLabel();
+            }
+        }
+
+        private void UpdateSelectedDate( DateTime date)
+        {
+           
+            CalendarItem item = (CalendarItem)(from oneChild in _itemsGrid.Children
+                                               where oneChild is CalendarItem &&
+                                               ((CalendarItem)oneChild).ItemDate.Equals(date)
+                                               select oneChild).First();
+            if (item != null)
+                _lastItem = item;
+
+            if (_lastItem != null)
+            {
+                SelectedDate = _lastItem.ItemDate;
+                OnDateClicked(_lastItem.ItemDate);
+                _lastItem.Refresh();
+            }
+        }
+
+        private bool CanMoveToDayMonthYear(int year, int month, int day)
+        {
+            var returnValue = false;
+
+            DateTime date = InitDate(year, month, day);
+
+
+
+            var testDate = date;
+            if (testDate >= MinimumDate && testDate <= MaximumDate)
+            {
+                returnValue = true;
+            }
+            return returnValue;
+        }
+
+        private DateTime InitDate(int year, int month, int day)
+        {
+            if (day == 0)
+            {
+                if (CanMoveToMonthYear(year, month - 1))
+                {
+                    month--;
+                    if (month == 0)
+                    {
+                        month = 12;
+                        year--;
+                    }
+
+                    day = DateTime.DaysInMonth(year, month);
+                }
+            }
+            else
+            {
+                if (day == 32 ||
+                    (day == 31 && (month == 4 || month == 6 || month == 9 || month == 11)) ||
+                    ((month == 2) && ((day == 30 && DateTime.IsLeapYear(year)) || (day == 29 && !DateTime.IsLeapYear(year)))))
+                {
+
+                    if (CanMoveToMonthYear(year, month + 1))
+                    {
+                        month++;
+                        if (month == 13)
+                        {
+                            month = 1;
+                            year++;
+                        }
+                    }
+
+                }
+                day = 1;
+            }
+
+      /*      if (month == 0)
+            {
+                day = DateTime.DaysInMonth(year, month);
+                year--;
+                month = 12;
+            }
+            else if (month == 13)
+            {
+                day = 1;
+                month = 1;
+                year++;
+            }
+       * */
+
+            return new DateTime(year,month,day);
+        }
+
+        private bool CanMoveToMonthYear(int year, int month)
+        {
+            var returnValue = false;
+
+            if (month == 0)
+            {
+                year = year - 1;
+                month = 12;
+            }
+            else if (month == 13)
+            {
+                month = 1;
+                year = year + 1;
+            }
+            var testDate = new DateTime(year, month, 1);
+            if (testDate >= MinimumDate && testDate <= MaximumDate)
+            {
+                returnValue = true;
+            }
+            return returnValue;
+        }
 
         private void SetupDayLabels()
         {
@@ -1179,6 +1292,7 @@ namespace WPCalendar
             OnMonthChanging(_year, _month);
             YearMonthLabel = string.Concat(GetMonthName(), " ", _year.ToString(CultureInfo.InvariantCulture));
             _ignoreMonthChange = true;
+            
             SelectedMonth = _month;
             SelectedYear = _year;
             _ignoreMonthChange = false;
@@ -1362,11 +1476,9 @@ namespace WPCalendar
                         item.IsSelected = true;
                 }
                 else
-                {
-                    item.IsSelected = false;
-                }
-            }
 
+                    item.IsSelected = false;
+            }
 
             item.DayNumber = addedDays;
             item.SetDayType(this.EventsCalendar);
@@ -1387,10 +1499,9 @@ namespace WPCalendar
                         item.SetValue(Grid.RowProperty, rowCount);
                         item.SetValue(Grid.ColumnProperty, columnCount);
                         item.Visibility = Visibility.Collapsed;
-                        //   item.Visibility = Visibility.Visible;
                         item.Tag = string.Concat(rowCount.ToString(CultureInfo.InvariantCulture), ":", columnCount.ToString(CultureInfo.InvariantCulture));
                         item.Click += ItemClick;
-                       // item.Hold += ItemHold;
+
                         if (CalendarItemStyle != null)
                         {
                             item.Style = CalendarItemStyle;

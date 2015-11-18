@@ -48,6 +48,16 @@ namespace WPCalendar
             _owningCalendar = owner;
         }
 
+        public CalendarItem(CalendarItem lastItem)
+        {
+            // TODO: Complete member initialization
+            this._owningCalendar = lastItem._owningCalendar;
+            this.DayNumber = lastItem.DayNumber;
+            this.EventsForDay = lastItem.EventsForDay;
+            this.ItemDate = lastItem.ItemDate;
+        }
+
+
         #endregion
 
         #region Properties
@@ -128,7 +138,6 @@ namespace WPCalendar
             DependencyProperty.Register("ItemDate", typeof(DateTime), typeof(CalendarItem), new PropertyMetadata(null));
 
 
-
         /// <summary>
         /// Date for the calendar item
         /// </summary>
@@ -143,6 +152,7 @@ namespace WPCalendar
         /// </summary>
         internal static readonly DependencyProperty BackgroundBrushProperty =
             DependencyProperty.Register("BackgroundBrush", typeof(Brush), typeof(CalendarItem), new PropertyMetadata(null));
+        private CalendarItem _lastItem;
         #endregion
 
         #region Template
@@ -157,15 +167,6 @@ namespace WPCalendar
             Foreground = Application.Current.Resources["PhoneForegroundBrush"] as Brush;
             SetBackcolor();
             SetForecolor();
-
-         //   _owningCalendar._scrollViewerHours.SizeChanged += _scrollViewerHours_SizeChanged;
-        }
-
-        public void _scrollViewerHours_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            ScrollViewer sv = sender as ScrollViewer;
-            if (double.IsNaN(sv.Height))
-                ResizeScrollviewer();
         }
 
         private bool IsConverterNeeded()
