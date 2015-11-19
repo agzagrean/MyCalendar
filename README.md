@@ -1,4 +1,5 @@
-**MyCalendar **
+*MyCalendar
+
 - a Windows Phone  8 custom calendar (in progress)
 
 WPCalendar is a  Windows Phone 8 calendar control based on the WPControl build by Sergey Barskiy (http://wpcontrols.codeplex.com/)
