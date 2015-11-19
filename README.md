@@ -1,4 +1,4 @@
-*MyCalendar
+#MyCalendar
 
 - a Windows Phone  8 custom calendar (in progress)
 
