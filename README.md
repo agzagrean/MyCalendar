@@ -7,8 +7,8 @@ Added capabilities:
  * Backround cell dinamically constructed based on events/day 
  * Explicit refresh of detail view 
  * Display day details: events' details per day & hour 
- * Edit/Add/Update/Delete events
- * Navigate throught days on swipe in DetailsView (not done)
+ * Edit/Add/Update/Delete events (in progress)
+ * Navigate throught days on swipe in DetailsView (in progress)
  
 
 Previous capabilities (from http://wpcontrols.codeplex.com/):
